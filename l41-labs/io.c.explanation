@@ -1,0 +1,22 @@
+io.c:
+- I/O benchmark: opens file/device and performs read()/write() and times the operations
+- BLOCKSIZE: 16 * 1024
+- TOTALSIZE: 16 * 1024 * 1024
+- io(pathname):
+	- blockcount = totalsize/buffersize
+	- allocate memory for I/O buffer equal to buffersize provided (BLOCKSIZE by default)
+	- "-d" allows buffer-cache bypass i.e. O_DIRECT flag to open()
+	- if "-B" not specified then: fsync(file desriptor), sync(), sleep(1)
+		- ensures filesystem is quiesced for benchmark
+	- clock_gettime(CLOCK_REALTIME, ...) before and after run
+		- can be used by dtrace as bracketing of purely the I/O loop of the benchmark
+	- Actual benchmark:
+		- i = 0:blockcount
+		- write() or read() using alloced buffer
+		- if "-s" flag is set perform fsync(file descriptor) after loop
+	- if "-q" not specified then: print bytes/second rate
+		- if "-v" specified then print summary of setup varibles as well
+
+Makefile:
+	- static: adds "-static" flag to clang
+	- dynamic: adds "-dynamic" flag to clang
