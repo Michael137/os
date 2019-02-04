@@ -1,0 +1,26 @@
+# Build Cross-copmiler
+## What?
+
+Build a cross compiler for a target triple (e.g. i686-elf)
+## Requirements
+
+* binutils
+* gcc
+
+## Installation
+1. Get sources for gcc and binutils
+2.
+export PREFIX="$HOME/opt/cross" # this is where output binaries are built to
+export TARGET=i686-elf # target triple
+export PATH="$PREFIX/bin:$PATH"
+3. Follow osdev.org wiki on building cross-compiler for osdev
+4. export PATH="$HOME/opt/cross/bin:$PATH"
+
+Next step involves creating a minimal kernel from: boot.s, kernel.c and linker.ld
+
+# Booting OS
+
+* Write multiboot header (boot.s)
+** Assemble using: i686-elf-as boot.s -o boot.o
+
+# Implement the Kernel
