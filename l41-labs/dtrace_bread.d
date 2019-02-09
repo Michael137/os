@@ -1,1 +1,4 @@
-fbt::bread*:entry /execname == io-static/ { @traces[id] = count() }
+fbt::bread*:entry
+{
+	@traces[execname, id] = count()
+}
