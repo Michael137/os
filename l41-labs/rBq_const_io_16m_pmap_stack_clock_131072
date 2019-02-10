@@ -1,0 +1,20 @@
+dtrace: script 'dtrace_pmap_stack_clock.d' matched 3 probes
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+dtrace: pid 3945 has exited
+
+
+              kernel`pmap_copy_pages
+              kernel`ffs_read+0x1ac
+              kernel`VOP_READ_APV+0x9c
+              kernel`vn_read+0x180
+              kernel`vn_io_fault_doio+0x88
+              kernel`vn_io_fault1+0x324
+              kernel`vn_io_fault+0x1b0
+              kernel`dofileread+0xb0
+              kernel`kern_readv+0x78
+              kernel`sys_read+0x4c
+              kernel`swi_handler+0x6d8
+              kernel`swi_exit
+              kernel`swi_exit
+                4

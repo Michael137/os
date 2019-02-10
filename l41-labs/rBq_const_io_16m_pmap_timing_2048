@@ -1,0 +1,8 @@
+dtrace: script 'dtrace_pmap_copy_timing.d' matched 6 probes
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+dtrace: pid 1764 has exited
+
+  ffs_read                                                   73100318
+  breadn_flags                                                 133481
+  vn_io_fault_pgmove                                         57443731

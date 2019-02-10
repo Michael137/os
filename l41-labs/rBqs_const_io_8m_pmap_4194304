@@ -1,0 +1,6 @@
+dtrace: script 'dtrace_pmap.d' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+dtrace: pid 3477 has exited
+
+  io-static                                                       128

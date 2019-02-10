@@ -1,0 +1,8 @@
+dtrace: script 'dtrace_bread.d' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+dtrace: pid 3514 has exited
+
+  io-static                                                         3
+  seq                                                               3
+  dtrace                                                            6

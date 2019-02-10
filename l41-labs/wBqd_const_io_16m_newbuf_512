@@ -1,0 +1,25 @@
+dtrace: script 'dtrace_newbuf.d' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+dtrace: pid 2405 has exited
+
+  adjkerntz                                                         3
+  sleep                                                             3
+  sysctl                                                            3
+  atrun                                                             4
+  syslogd                                                           4
+  seq                                                               6
+  ls                                                                7
+  unlink                                                           10
+  dd                                                               11
+  csh                                                              13
+  syncer                                                           25
+  cron                                                             38
+  dtrace                                                           38
+  newsyslog                                                        63
+  sh                                                               86
+  mv                                                               91
+  bufspacedaemon                                                  532
+  bufdaemon                                                      1146
+  geom                                                          32738
+  io-static                                                   6703063
