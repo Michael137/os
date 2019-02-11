@@ -1,0 +1,16 @@
+
+
+              kernel`pmap_copy_pages
+              kernel`ffs_write+0x3b0
+              kernel`VOP_WRITE_APV+0x124
+              kernel`vn_write+0x278
+              kernel`vn_io_fault_doio+0x88
+              kernel`vn_io_fault1+0x324
+              kernel`vn_io_fault+0x1b0
+              kernel`dofilewrite+0xa8
+              kernel`kern_writev+0x78
+              kernel`sys_write+0x4c
+              kernel`swi_handler+0x6d8
+              kernel`swi_exit
+              kernel`swi_exit
+              128

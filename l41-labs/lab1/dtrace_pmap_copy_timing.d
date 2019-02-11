@@ -38,3 +38,15 @@ fbt::vn_io_fault_pgmove:return
 	@pmap[probefunc] = sum(timestamp - self->ts);
 	self->ts = 0;
 }
+
+fbt::pmap_copy_pages:entry
+{
+	self->cts = timestamp;
+}
+
+fbt::pmap_copy_pages:return
+/self->ts/
+{
+	@cmap[probefunc] = sum(timestamp - self->cts);
+	self->cts = 0;
+}
