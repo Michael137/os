@@ -57,8 +57,8 @@
  * Based on the simplistic IPC benchmark used in prior labs, this version is
  * extended to support TCP.
  */
-
-#define	timespecsub(vvp, uvp)						\
+// XXX137: timespecsub exists in time.h on some systems
+#define	ipc_timespecsub(vvp, uvp)						\
 	do {								\
 		(vvp)->tv_sec -= (uvp)->tv_sec;				\
 		(vvp)->tv_nsec -= (uvp)->tv_nsec;			\
@@ -237,9 +237,15 @@ pmc_setup(void)
 	for (i = 0; i < COUNTERSET_MAX_EVENTS; i++) {
 		if (counterset[i] == NULL)
 			continue;
+#if __FreeBSD_version > 1200000
+		if (pmc_allocate(counterset[i], PMC_MODE_TC,
+		    PMC_F_DESCENDANTS, PMC_CPU_ANY, &pmcid[i], 0) < 0)
+			err(EX_OSERR, "FAIL: pmc_allocate %s", counterset[i]);
+#else
 		if (pmc_allocate(counterset[i], PMC_MODE_TC,
 		    PMC_F_DESCENDANTS, PMC_CPU_ANY, &pmcid[i]) < 0)
 			err(EX_OSERR, "FAIL: pmc_allocate %s", counterset[i]);
+#endif
 		if (pmc_attach(pmcid[i], 0) != 0)
 			err(EX_OSERR, "FAIL: pmc_attach %s", counterset[i]);
 		if (pmc_write(pmcid[i], 0) < 0)
@@ -578,7 +584,7 @@ do_2thread(int readfd, int writefd, long blockcount, void *readbuf,
 	finishtime = receiver(readfd, blockcount, readbuf);
 	if (pthread_join(thread, NULL) < 0)
 		err(EX_OSERR, "FAIL: pthread_join");
-	timespecsub(&finishtime, &sa.sa_starttime);
+	ipc_timespecsub(&finishtime, &sa.sa_starttime);
 	return (finishtime);
 }
 
@@ -617,7 +623,7 @@ do_2proc(int readfd, int writefd, long blockcount, void *readbuf,
 		err(EX_OSERR, "FAIL: waitpid");
 	if (pid2 != pid)
 		err(EX_OSERR, "FAIL: waitpid PID mismatch");
-	timespecsub(&finishtime, &sap->sa_starttime);
+	ipc_timespecsub(&finishtime, &sap->sa_starttime);
 	return (finishtime);
 }
 
@@ -720,7 +726,7 @@ do_1thread(int readfd, int writefd, long blockcount, void *readbuf,
 #endif
 	if (clock_gettime(CLOCK_REALTIME, &finishtime) < 0)
 		err(EX_OSERR, "FAIL: clock_gettime");
-	timespecsub(&finishtime, &starttime);
+	ipc_timespecsub(&finishtime, &starttime);
 	return (finishtime);
 }
 
