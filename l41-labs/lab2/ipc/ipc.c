@@ -1009,7 +1009,7 @@ ipc(void)
 		/* Kilobytes/second. */
 		rate /= (1024);
 
-		printf("%.2F KBytes/sec\n", rate);
+		printf("speed: %.2F KBytes/sec\n", rate);
 	}
 	close(readfd);
 	close(writefd);
