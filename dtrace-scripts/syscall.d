@@ -5,6 +5,7 @@
 syscall:::entry
 /execname == $$1/
 {
+	@syscalls = count();
 	self->start = timestamp;
 	self->insyscall = 1;
 }
@@ -13,13 +14,29 @@ syscall:::return
 /execname == $$1 && self->insyscall != 0/
 {
 	length = timestamp - self->start;
-	@syscall_time[probefunc] = sum(length);
-	@totaltime = sum(length);
+	@syscall_times[probefunc] = sum(length);
+	@syscall_total = sum(length);
 	self->insyscall = 0;
+}
+
+fbt::trap:entry
+/execname == $$1 && self->insyscall == 0/
+{
+	@traps = count();
+	self->start = timestamp;
+}
+
+fbt::trap:return
+/execname == $$1 && self->insyscall == 0/
+{
+	length = timestamp - self->start;
+	@trap_total = sum(length);
 }
 
 END
 {
-	printa(@syscall_time);
-	printa(@totaltime);
+	printa(@syscall_times);
+
+	printf("syscalls:\n"); printa(@syscalls); printa(@syscall_total);
+	printf("traps:\n"); printa(@traps); printa(@trap_total);
 }
