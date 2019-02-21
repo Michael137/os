@@ -1,0 +1,10 @@
+CC=cc
+
+SRCS=echo.c
+KMOD=echo
+
+.include <bsd.kmod.mk>
+
+.PHONY:
+ld:
+	sudo kldload -v ./echo.ko
