@@ -1,0 +1,10 @@
+CC=cc
+
+SRCS=skeleton.c
+KMOD=skeleton
+
+.include <bsd.kmod.mk>
+
+.PHONY:
+ld:
+	sudo kldload -v ./skeleton.ko
