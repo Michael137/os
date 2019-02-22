@@ -1,0 +1,147 @@
+dtrace: script 'dtrace-scripts/profile.d' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+
+
+
+                1
+
+              kernel`spinlock_exit+0x3a
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`spinlock_exit+0x3a
+              kernel`soreceive_generic+0x278
+              kernel`soreceive+0x44
+              kernel`dofileread+0x95
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`__mnt_vnode_next_all+0xe1
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`vfs_msync+0x226
+                1
+
+              kernel`acpi_timer_get_timecount+0x1c
+              kernel`g_io_request+0x2a7
+              kernel`bufwrite+0x21e
+              kernel`vfs_bio_awrite+0x372
+              kernel`vop_stdfsync+0x267
+              kernel`VOP_FSYNC_APV+0x7e
+              kernel`ffs_sync+0x32b
+              kernel`sys_sync+0x126
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`tcp_output+0xa8e
+              kernel`dofileread+0x95
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`soreceive_generic+0x940
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`uma_zfree_arg+0x638
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`__mnt_vnode_next_all+0x4d
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`mb_ctor_mbuf+0x2f
+              kernel`sosend_generic+0x47a
+              kernel`sosend+0x50
+              kernel`soo_write+0x49
+              kernel`dofilewrite+0xb2
+              kernel`sys_write+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`copyin_nosmap_std+0x124
+              kernel`sosend+0x50
+              kernel`soo_write+0x49
+              kernel`dofilewrite+0xb2
+              kernel`sys_write+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`mnt_vnode_next_active+0x42f
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`ffs_sync+0x24c
+                1
+
+              kernel`spinlock_exit+0x3a
+              kernel`if_simloop+0xfb
+              kernel`ip_output+0x1426
+              kernel`tcp_output+0x1b0c
+              kernel`tcp_usr_rcvd+0xb1
+              kernel`soreceive_generic+0xe48
+              kernel`soreceive+0x44
+              kernel`dofileread+0x95
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                2
+
+              kernel`spinlock_exit+0x3a
+              kernel`netisr_queue+0x5b
+              kernel`if_simloop+0xfb
+              kernel`ip_output+0x1426
+              kernel`tcp_output+0x1b0c
+              kernel`tcp_usr_rcvd+0xb1
+              kernel`soreceive_generic+0xe48
+              kernel`soreceive+0x44
+              kernel`dofileread+0x95
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                2
+
+              kernel`vfs_msync+0x262
+                2
+
+              kernel`mnt_vnode_next_active+0x317
+              kernel`0xffffffff8104fabd
+                2
+
+              kernel`__mnt_vnode_next_all+0x1b2
+              kernel`0xffffffff8104fabd
+                2
+
+              kernel`ffs_sync+0x182
+                4
+
+              kernel`pagezero_std+0xd
+              kernel`trap+0x425
+              kernel`0xffffffff8104f1d5
+               15
+
+              kernel`spinlock_exit+0x3a
+              kernel`sosend_generic+0x308
+              kernel`sosend+0x50
+              kernel`soo_write+0x49
+              kernel`dofilewrite+0xb2
+              kernel`sys_write+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+               16
+
+              kernel`vfs_msync+0x1c4
+               56
