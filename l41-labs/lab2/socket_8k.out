@@ -4,20 +4,7 @@ dtrace: aggregation size lowered to 2m
 
 
 
-              kernel`spinlock_exit+0x3a
-              kernel`vm_thread_new+0x175
-              kernel`thread_alloc+0x31
-              kernel`thread_create+0x14f
-              kernel`sys_thr_new+0xd2
-              kernel`amd64_syscall+0x369
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`__mnt_vnode_next_all+0xe1
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`m_getm2+0xf4
+              kernel`tcp_output+0x553
               kernel`soo_write+0x49
               kernel`dofilewrite+0xb2
               kernel`sys_write+0xc3
@@ -25,9 +12,10 @@ dtrace: aggregation size lowered to 2m
               kernel`0xffffffff8104fabd
                 1
 
+              kernel`vfs_msync+0x226
+                1
+
               kernel`acpi_timer_get_timecount+0x1c
-              kernel`g_io_request+0x2a7
-              kernel`ufs_strategy+0x83
               kernel`VOP_STRATEGY_APV+0x7e
               kernel`bufstrategy+0x2c
               kernel`bufwrite+0x21e
@@ -39,55 +27,37 @@ dtrace: aggregation size lowered to 2m
               kernel`0xffffffff8104fabd
                 1
 
-              kernel`fget_unlocked+0x9e
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`fget_unlocked+0xad
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`cpu_fetch_syscall_args+0x43
-                1
-
-              kernel`soreceive_generic+0x940
+              kernel`acpi_timer_get_timecount+0x1c
+              kernel`ufs_itimes+0x3d
+              kernel`ffs_update+0x1b
+              kernel`ffs_sync+0x1fd
+              kernel`sys_sync+0x126
               kernel`amd64_syscall+0x369
               kernel`0xffffffff8104fabd
                 1
 
-              kernel`mb_ctor_mbuf+0xc
-              kernel`sosend_generic+0x47a
+              kernel`0xffffffff8104fa47
+                1
+
+              kernel`vfs_msync+0x26d
+                1
+
+              kernel`fget_unlocked+0x100
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`fget_unlocked+0x1
+                1
+
+              kernel`mb_ctor_mbuf+0x2f
+              kernel`tcp_usr_send+0x443
+              kernel`sosend_generic+0x586
               kernel`sosend+0x50
               kernel`soo_write+0x49
               kernel`dofilewrite+0xb2
               kernel`sys_write+0xc3
               kernel`amd64_syscall+0x369
               kernel`0xffffffff8104fabd
-                1
-
-              kernel`sosend_generic+0x51f
-              kernel`sys_write+0xc3
-              kernel`amd64_syscall+0x369
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`soreceive_generic+0xb65
-              kernel`amd64_syscall+0x369
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`getmicrouptime
-              kernel`dofileread+0x95
-              kernel`sys_read+0xc3
-              kernel`amd64_syscall+0x369
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`mac_socket_check_send
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`mnt_vnode_next_active
                 1
 
               kernel`copyin_nosmap_std+0x124
@@ -99,19 +69,38 @@ dtrace: aggregation size lowered to 2m
               kernel`0xffffffff8104fabd
                 1
 
-              kernel`vfs_msync+0x1c4
-                1
-
-              kernel`mnt_vnode_next_active+0x317
-              kernel`0xffffffff8104fabd
-                1
-
-              kernel`copyout_nosmap_std+0x42
+              kernel`lock_delay+0x40
+              kernel`soreceive+0x44
               kernel`dofileread+0x95
               kernel`sys_read+0xc3
               kernel`amd64_syscall+0x369
               kernel`0xffffffff8104fabd
                 1
+
+              kernel`copyout_nosmap_std+0x124
+              kernel`dofileread+0x95
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`_mtx_trylock_flags_int+0x2b
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+                2
+
+              kernel`m_getm2+0x24f
+              kernel`soo_write+0x49
+              kernel`dofilewrite+0xb2
+              kernel`sys_write+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                2
+
+              kernel`vfs_msync+0x1c4
+                2
 
               kernel`spinlock_exit+0x3a
               kernel`if_simloop+0xfb
@@ -124,32 +113,18 @@ dtrace: aggregation size lowered to 2m
               kernel`sys_read+0xc3
               kernel`amd64_syscall+0x369
               kernel`0xffffffff8104fabd
-                2
+                3
+
+              kernel`ffs_sync+0x182
+                3
 
               kernel`mnt_vnode_next_active+0x496
               kernel`0xffffffff8104fabd
-                2
-
-              kernel`_mtx_trylock_flags_int+0x2b
-              kernel`amd64_syscall+0x369
-              kernel`0xffffffff8104fabd
-                2
-
-              kernel`ffs_sync+0x182
                 3
 
               kernel`__mnt_vnode_next_all+0x1b2
               kernel`0xffffffff8104fabd
                 3
-
-              kernel`spinlock_exit+0x3a
-              kernel`soreceive_generic+0x278
-              kernel`soreceive+0x44
-              kernel`dofileread+0x95
-              kernel`sys_read+0xc3
-              kernel`amd64_syscall+0x369
-              kernel`0xffffffff8104fabd
-                4
 
               kernel`spinlock_exit+0x3a
               kernel`netisr_queue+0x5b
@@ -164,19 +139,3 @@ dtrace: aggregation size lowered to 2m
               kernel`amd64_syscall+0x369
               kernel`0xffffffff8104fabd
                 6
-
-                7
-
-              kernel`spinlock_exit+0x3a
-              kernel`sosend_generic+0x308
-              kernel`sosend+0x50
-              kernel`soo_write+0x49
-              kernel`dofilewrite+0xb2
-              kernel`sys_write+0xc3
-              kernel`amd64_syscall+0x369
-              kernel`0xffffffff8104fabd
-                8
-
-              kernel`__mnt_vnode_next_all+0xc9
-              kernel`0xffffffff8104fabd
-               59
