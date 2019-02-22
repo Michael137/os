@@ -1,0 +1,126 @@
+Sorry, try again.
+dtrace: script 'dtrace-scripts/profile.d' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+
+
+
+              kernel`spinlock_exit+0x3a
+              kernel`dofileread+0x95
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`ffs_sync+0x182
+                1
+
+              kernel`vfs_msync+0x226
+                1
+
+              kernel`ata_generic_command+0xf9
+              kernel`xpt_action_default+0x8d9
+              kernel`adastart+0x991
+              kernel`xpt_run_allocq+0x183
+              kernel`adastrategy+0x8e
+              kernel`g_disk_start+0x34f
+              kernel`g_io_request+0x2a7
+              kernel`g_part_start+0x108
+              kernel`g_io_request+0x2a7
+              kernel`g_part_start+0x108
+              kernel`g_io_request+0x2a7
+              kernel`ufs_strategy+0x83
+              kernel`VOP_STRATEGY_APV+0x7e
+              kernel`bufstrategy+0x2c
+              kernel`bufwrite+0x21e
+              kernel`vfs_bio_awrite+0x372
+              kernel`ffs_syncvnode+0x326
+              kernel`ffs_sync+0x1fd
+              kernel`sys_sync+0x126
+              kernel`amd64_syscall+0x369
+                1
+
+              kernel`acpi_timer_get_timecount+0x1c
+              kernel`ufs_close+0x69
+              kernel`VOP_CLOSE_APV+0x78
+              kernel`kern_execve+0x8c5
+              kernel`sys_execve+0x4c
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`mnt_vnode_next_active+0x496
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`vm_reserv_free_page+0x31
+              kernel`vm_object_deallocate+0x28
+              kernel`_vm_map_unlock+0xd9
+              kernel`vm_map_remove+0xb2
+              kernel`vmspace_exit+0xc9
+              kernel`exit1+0x5c9
+              kernel`0xffffffff80b5539d
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`should_yield+0x1
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`__mnt_vnode_next_all+0x143
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`__mnt_vnode_next_all+0x4d
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`lock_delay+0x42
+              kernel`dofilewrite+0xb2
+              kernel`sys_write+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`mnt_vnode_next_active+0x32
+              kernel`0xffffffff8104fabd
+                1
+
+              kernel`vfs_msync+0x1c4
+                2
+
+              kernel`_mtx_trylock_flags_int+0x2b
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                2
+
+              kernel`__mnt_vnode_next_all+0x1b2
+              kernel`0xffffffff8104fabd
+                2
+
+              kernel`spinlock_exit+0x3a
+              kernel`dofilewrite+0xb2
+              kernel`sys_write+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                3
+
+              kernel`spinlock_exit+0x3a
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                5
+
+              kernel`spinlock_exit+0x3a
+              kernel`sys_write+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+                8
+
+              kernel`acpi_timer_get_timecount+0x1c
+              kernel`dofileread+0x95
+              kernel`sys_read+0xc3
+              kernel`amd64_syscall+0x369
+              kernel`0xffffffff8104fabd
+               13
