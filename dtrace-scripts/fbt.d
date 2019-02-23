@@ -15,6 +15,7 @@ syscall::clock_gettime:entry
 /*fbt::*page*:entry*/
 /*fbt:::entry*/
 /*fbt::vm_*:entry*/
+/* pipe + low buf size for socket call:vm_fault_quick_hold_pages */
 fbt::vm_fault:entry,
 fbt::vm_page*:entry,
 fbt::pmap*:entry
@@ -35,4 +36,5 @@ END
 {
 	printa(@fbt);
 	printa(@bench_time);
+	printa(@wake);
 }
