@@ -36,5 +36,4 @@ END
 {
 	printa(@fbt);
 	printa(@bench_time);
-	printa(@wake);
 }
