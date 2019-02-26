@@ -2,7 +2,6 @@ syscall::clock_gettime:return
 /execname == "ipc-static" && self->in_bench == 0/
 {
 	self->in_bench = 1;
-	printf("HELLO");
 }
 
 syscall::clock_gettime:entry
