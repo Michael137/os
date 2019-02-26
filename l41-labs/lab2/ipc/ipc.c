@@ -528,9 +528,10 @@ receiver(int readfd, long blockcount, void *buf)
 		const size_t bytes_to_read = min(totalsize - read_sofar, buffersize - offset);
 		len = read(readfd, buf + offset, bytes_to_read);
 		/*printf("read(%d, %zd, %zd) = %zd\n", readfd, offset, bytes_to_read, len);*/
-		/* if (len != bytes_to_read) {
-			warn("blocking read returned early: %zd != %zd", len, bytes_to_read);
-		} */
+		// XXX137: this gets hit
+//		if (len != bytes_to_read) {
+//			warn("blocking read returned early: %zd != %zd", len, bytes_to_read);
+//		}
 		if (len < 0)
 			err(EX_IOERR, "FAIL: read");
 		read_sofar += len;
