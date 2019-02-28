@@ -1,1 +1,1 @@
-sudo dtrace -n fbt::*mbuf*:entry /execname == "ipc-static"/ { @[probefunc] = count() }
+fbt::*mbuf*:entry /execname == "ipc-static"/ { @[probefunc] = count() }
