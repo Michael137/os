@@ -5,6 +5,8 @@ import matplotlib
 matplotlib.use('GTKAgg')
 import matplotlib.pyplot as plt
 
+SIZES = [512 * 2 ** exp for exp in range (2, 16)]
+
 '''
     TODO:
         for each thread mode
@@ -41,9 +43,12 @@ for size,res in toCompare.iteritems():
     pvalues_ttest.append(ttest.pvalue)
 
 fig=plt.figure()
-ax = fig.add_subplot(2,1,1)
+ax1 = fig.add_subplot(2,1,1)
+ax2 = fig.add_subplot(2,1,1)
 
-line, = ax.plot(pvalues)
-ax.set_yscale('log')
+line, = ax1.plot(pvalues, SIZES)
+line, = ax2.plot(pvalues, SIZES)
+ax1.set_yscale('log')
+ax2.set_yscale('log')
 
 fig.savefig("pipe_2thread_pipe_2proc.png")
