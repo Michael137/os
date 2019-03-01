@@ -41,10 +41,9 @@ for size,res in toCompare.iteritems():
     pvalues_ttest.append(ttest.pvalue)
 
 fig=plt.figure()
-ax1=fig.add_subplot(2,1,1)
-ax2=fig.add_subplot(2,1,2)
+ax = fig.add_subplot(2,1,1)
 
-plt.yscale('log')
-plt.plot(pvalues)
-plt.plot(pvalues_ttest)
+line, = ax.plot(pvalues)
+ax.set_yscale('log')
+
 fig.savefig("pipe_2thread_pipe_2proc.png")
