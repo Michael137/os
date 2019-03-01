@@ -44,6 +44,7 @@ fig=plt.figure()
 ax1=fig.add_subplot(2,1,1)
 ax2=fig.add_subplot(2,1,2)
 
+plt.yscale('log')
 plt.plot(pvalues)
 plt.plot(pvalues_ttest)
 fig.savefig("pipe_2thread_pipe_2proc.png")
