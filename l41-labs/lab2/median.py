@@ -44,10 +44,10 @@ for size,res in toCompare.iteritems():
 
 fig=plt.figure()
 ax1 = fig.add_subplot(2,1,1)
-ax2 = fig.add_subplot(2,1,1)
+ax2 = fig.add_subplot(2,1,2)
 
 line, = ax1.plot(pvalues, SIZES)
-line, = ax2.plot(pvalues, SIZES)
+line, = ax2.plot(pvalues_ttest, SIZES)
 ax1.set_yscale('log')
 ax2.set_yscale('log')
 
