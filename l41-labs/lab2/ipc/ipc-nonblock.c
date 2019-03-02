@@ -504,11 +504,12 @@ sender(struct sender_argument *sap)
 		len = write(sap->sa_writefd, sap->sa_buffer,
 		    min(buffersize, totalsize - write_sofar));
 		/*printf("write(%d, %zd, %zd) = %zd\n", sap->sa_writefd, 0, bytes_to_write, len);*/
-		if (len != bytes_to_write) {
-			errx(EX_IOERR, "blocking write() returned early: %zd != %zd", len, bytes_to_write);
-		}
-		if (len < 0)
-			err(EX_IOERR, "FAIL: write");
+		// XXX137: part of nonblocking IO tests
+//		if (len != bytes_to_write) {
+//			errx(EX_IOERR, "blocking write() returned early: %zd != %zd", len, bytes_to_write);
+//		}
+		//if (len < 0)
+		//	err(EX_IOERR, "FAIL: write");
 		write_sofar += len;
 	}
 }
@@ -787,6 +788,13 @@ ipc(void)
 		 */
 		readfd = fd[0];
 		writefd = fd[1];
+		// XXX137: just testing with non-blocking RW
+		flags = fcntl(writefd, F_GETFL, 0);
+		if (flags < 0)
+			err(EX_OSERR, "FAIL: fcntl(writefd, F_GETFL, 0)");
+		if (fcntl(writefd, F_SETFL, flags | O_NONBLOCK) < 0)
+			err(EX_OSERR, "FAIL: fcntl(writefd, F_SETFL, "
+		    	"flags | O_NONBLOCK)");
 		break;
 
 	case BENCHMARK_IPC_LOCAL_SOCKET:
