@@ -556,7 +556,7 @@ second_thread(void *arg)
 
 	if (!Bflag)
 		sleep(1);
-	sender(sap);
+	sender(sap); // BENCHMARK STARTS HERE
 
 	/*
 	 * No action needed to terminate thread other than to return.
@@ -582,7 +582,7 @@ do_2thread(int readfd, int writefd, long blockcount, void *readbuf,
 	sa.sa_buffer = writebuf;
 	if (pthread_create(&thread, NULL, second_thread, &sa) < 0)
 		err(EX_OSERR, "FAIL: pthread_create");
-	finishtime = receiver(readfd, blockcount, readbuf);
+	finishtime = receiver(readfd, blockcount, readbuf); // BENCHMARK ENDS HERE
 	if (pthread_join(thread, NULL) < 0)
 		err(EX_OSERR, "FAIL: pthread_join");
 	ipc_timespecsub(&finishtime, &sa.sa_starttime);
@@ -614,12 +614,12 @@ do_2proc(int readfd, int writefd, long blockcount, void *readbuf,
 	if (pid == 0) {
 		if (!Bflag)
 			sleep(1);
-		sender(sap);
+		sender(sap); // BENCHMARK STARTS HERE
 		if (!Bflag)
 			sleep(1);
 		_exit(0);
 	}
-	finishtime = receiver(readfd, blockcount, readbuf);
+	finishtime = receiver(readfd, blockcount, readbuf); // BENCHMARK ENDS HERE
 	if ((pid2 = waitpid(pid, NULL, 0)) < 0)
 		err(EX_OSERR, "FAIL: waitpid");
 	if (pid2 != pid)
@@ -799,7 +799,7 @@ ipc(void)
 		 */
 		readfd = fd[0];
 		writefd = fd[1];
-
+		break;
 
 	case BENCHMARK_IPC_TCP_SOCKET:
 		listenfd = socket(PF_INET, SOCK_STREAM, 0);

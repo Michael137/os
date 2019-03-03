@@ -807,7 +807,7 @@ ipc(void)
 		 */
 		readfd = fd[0];
 		writefd = fd[1];
-
+		break;
 
 	case BENCHMARK_IPC_TCP_SOCKET:
 		listenfd = socket(PF_INET, SOCK_STREAM, 0);
