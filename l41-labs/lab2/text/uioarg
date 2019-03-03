@@ -1,0 +1,12 @@
+$> dtrace -n 'fbt::pipe_write:entry /execname == "ipc-static"/ { print(*(struct uio*)(arg1))}' &
+$> ipc/ipc-static -i pipe -b 16777216 2proc && kill -2 $!
+CPU     ID                    FUNCTION:NAME
+  1  16547                 pipe_write:entry struct uio {
+    struct iovec *uio_iov = 0xfffffe004b1ef950
+    int uio_iovcnt = 0x1
+    off_t uio_offset = 0xffffffffffffffff
+    ssize_t uio_resid = 0x1000000
+    enum uio_seg uio_segflg = UIO_USERSPACE
+    enum uio_rw uio_rw = UIO_WRITE
+    struct thread *uio_td = 0xfffff80010595580
+}
