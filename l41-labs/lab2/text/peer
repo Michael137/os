@@ -1,0 +1,13 @@
+$> dtrace -n 'fbt::pipe_write:entry /execname == ipc-static/ { print(*(struct pipe*)((struct pipe*)((struct file*)(arg0))->f_data)->pipe_peer )}' &
+$> dtrace -n 'fbt::pipe_write:entry /execname == "ipc-static"/ { print(*(struct pipe*)((struct pipe*)((struct file*)(arg0))->f_data)->pipe_peer )}' &
+$> ipc/ipc-static -i pipe -b 16777216 2proc && kill -2 $!
+CPU     ID                    FUNCTION:NAME
+  1  16547                 pipe_write:entry struct pipe {
+    struct pipebuf pipe_buffer = {
+        u_int cnt = 0
+        u_int in = 0
+        u_int out = 0
+        u_int size = 0x4000
+        caddr_t buffer = 0xfffffe003ed8d000
+    }
+
