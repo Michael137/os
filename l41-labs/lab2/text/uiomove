@@ -1,0 +1,15 @@
+$> dtrace -n 'fbt::uiomove_faultflag:entry /execname == "ipc-static"/ { @ = count() }' &
+$> ipc/ipc-static -i pipe -b 4096 2thread && kill -2 $!
+             8202
+
+$> dtrace -n 'fbt::uiomove_faultflag:entry /execname == "ipc-static"/ { @ = count() }' &
+$> ipc/ipc-static -i pipe -b 8192 2thread && kill -2 $!
+                1
+
+$> dtrace -n 'fbt::uiomove_fromphys:entry /execname == "ipc-static"/ { @ = count() }' &
+$> ipc/ipc-static -i pipe -b 8192 2thread && kill -2 $!
+             2048
+
+$> dtrace -n 'fbt::uiomove_fromphys:entry /execname == "ipc-static"/ { @ = count() }' &
+$> ipc/ipc-static -i pipe -b 4092 2thread && kill -2 $!
+	<-- no output -->
