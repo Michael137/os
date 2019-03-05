@@ -1,0 +1,5 @@
+$> dtrace -n 'fbt::soreserve:entry /execname == "ipc-static"/ { printf("%d %d", (size_t)arg1, (size_t)arg2)}' &
+$> ipc/ipc-static -i local -b 32768 1thread && kill $!
+  0  16992                  soreserve:entry 8192 8192
+  0  16992                  soreserve:entry 8192 8192
+
