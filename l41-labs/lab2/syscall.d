@@ -26,6 +26,7 @@ syscall:::return
 {
 	length = timestamp - self->start;
 	@syscall_total["syscall_total"] = sum(length);
+	@sys_br["br",probefunc] = sum(length);
 	self->insyscall = 0;
 }
 
@@ -41,4 +42,5 @@ fbt::abort_handler:return
 {
 	length = timestamp - self->start;
 	@trap_total["trap_total"] = sum(length);
+	@trap_br["br", probefunc] = sum(length);
 }
