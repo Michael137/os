@@ -1,2 +1,2 @@
-rename 's/-s/_s/' *
-rename 's/__/_/' *
+rename -f 's/-s/_s/' *
+rename -f 's/__/_/' *

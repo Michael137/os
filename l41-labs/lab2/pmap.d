@@ -21,7 +21,7 @@ fbt::pmap_fault:entry
 	&& in_bench
 	&& !stop_tracing/
 {
-	@["count", probefunc] = count();
+	@count["count", probefunc] = count();
 	self->ts = timestamp
 }
 
@@ -32,5 +32,5 @@ fbt::pmap_fault:return
 	&& !stop_tracing
 	&& self->ts/
 {
-	@["total", probefunc] = sum(timestamp - self->ts);
+	@total["total", probefunc] = sum(timestamp - self->ts);
 }

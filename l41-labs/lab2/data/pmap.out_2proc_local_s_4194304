@@ -1,40 +1,40 @@
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2619
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21286464
+  total                                               vm_reserv_alloc_page                                       62361741
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21092659
+  total                                               vm_reserv_alloc_page                                       62725071
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21260998
+  total                                               vm_reserv_alloc_page                                       61478521
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21124513
+  total                                               vm_reserv_alloc_page                                       63013421
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21197299
+  total                                               vm_reserv_alloc_page                                       61339317
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21111083
+  total                                               vm_reserv_alloc_page                                       61147143
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21296871
+  total                                               vm_reserv_alloc_page                                       61780928
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21251060
+  total                                               vm_reserv_alloc_page                                       61670041
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
-  count                                               vm_fault_prefault                                                 2
-  count                                               vm_fault                                                       2050
+  total                                               pmap_fault                                                 21208495
+  total                                               vm_reserv_alloc_page                                       62481284
+  count                                               vm_reserv_alloc_page                                           2049
   count                                               pmap_fault                                                     2051
-  count                                               vm_page_alloc                                                  2060
+  total                                               pmap_fault                                                 21298000
+  total                                               vm_reserv_alloc_page                                       61460861

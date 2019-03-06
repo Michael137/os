@@ -1,30 +1,40 @@
-  count                                               vm_fault                                                          9
   count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
-  count                                               vm_fault                                                          9
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   231697
+  total                                               vm_reserv_alloc_page                                         635918
   count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
-  count                                               vm_fault                                                          9
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   232441
+  total                                               vm_reserv_alloc_page                                         643682
   count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   230446
+  total                                               vm_reserv_alloc_page                                         628991
   count                                               pmap_fault                                                        9
-  count                                               vm_fault                                                          9
-  count                                               vm_page_alloc                                                    18
-  count                                               vm_fault                                                          9
-  count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
-  count                                               vm_fault                                                          9
-  count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   104025
+  total                                               vm_reserv_alloc_page                                         624501
   count                                               pmap_fault                                                        9
-  count                                               vm_fault                                                          9
-  count                                               vm_page_alloc                                                    18
-  count                                               vm_fault                                                          9
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   103450
+  total                                               vm_reserv_alloc_page                                         629004
   count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
-  count                                               vm_fault                                                          9
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   226047
+  total                                               vm_reserv_alloc_page                                         688626
   count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
-  count                                               vm_fault                                                          9
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   230432
+  total                                               vm_reserv_alloc_page                                         627287
   count                                               pmap_fault                                                       12
-  count                                               vm_page_alloc                                                    18
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   224500
+  total                                               vm_reserv_alloc_page                                         630068
+  count                                               pmap_fault                                                       12
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   227980
+  total                                               vm_reserv_alloc_page                                         630371
+  count                                               pmap_fault                                                       12
+  count                                               vm_reserv_alloc_page                                             18
+  total                                               pmap_fault                                                   227565
+  total                                               vm_reserv_alloc_page                                         633697
