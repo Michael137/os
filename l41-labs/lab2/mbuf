@@ -1,0 +1,120 @@
+    struct sockbuf so_rcv = {
+        struct selinfo sb_sel = {
+            struct selfdlist si_tdlist = {
+                struct selfd *tqh_first = 0
+                struct selfd **tqh_last = 0
+            }
+            struct knlist si_note = {
+                struct klist kl_list = {
+                    struct knote *slh_first = 0
+                }
+                void (*)() kl_lock = 0xc03cd494
+                void (*)() kl_unlock = 0xc03cd550
+                void (*)() kl_assert_locked = 0xc03cd610
+                void (*)() kl_assert_unlocked = 0xc03cd614
+                void *kl_lockarg = 0xc3c408d8
+                int kl_autodestroy = 0
+            }
+            struct mtx *si_mtx = 0
+        }
+        struct mtx sb_mtx = {
+            struct lock_object lock_object = {
+                const char *lo_name = 0xc081caaf
+                u_int lo_flags = 0x1030000
+                u_int lo_data = 0
+                struct witness *lo_witness = 0
+            }
+            volatile uintptr_t mtx_lock = 0x4
+        }
+        struct sx sb_sx = {
+            struct lock_object lock_object = {
+                const char *lo_name = 0xc081d801
+                u_int lo_flags = 0x2330000
+                u_int lo_data = 0
+                struct witness *lo_witness = 0
+            }
+            volatile uintptr_t sx_lock = 0x1
+        }
+        short sb_state = 0
+        struct mbuf *sb_mb = 0xc3242100
+        struct mbuf *sb_mbtail = 0xc323bc00
+        struct mbuf *sb_lastrecord = 0xc3242100
+        struct mbuf *sb_sndptr = 0
+        struct mbuf *sb_fnrdy = 0
+        u_int sb_sndptroff = 0
+        u_int sb_acc = 0x2000
+        u_int sb_ccc = 0x2000
+        u_int sb_hiwat = 0x2000
+        u_int sb_mbcnt = 0x2200
+        u_int sb_mcnt = 0x2
+        u_int sb_ccnt = 0x2
+        u_int sb_mbmax = 0x10000
+        u_int sb_ctl = 0
+        int sb_lowat = 0x1
+        sbintime_t sb_timeo = 0
+        short sb_flags = 0
+        int (*)() sb_upcall = 0
+        void *sb_upcallarg = 0
+        struct sb_aiojobq = {
+            struct kaiocb *tqh_first = 0
+            struct kaiocb **tqh_last = 0xc3c40954
+        }
+        struct task sb_aiotask = {
+            struct ta_link = {
+                struct task *stqe_next = 0
+            }
+            uint16_t ta_pending = 0
+            u_short ta_priority = 0
+            task_fn_t *ta_func = 0xc04a3ee8
+            void *ta_context = 0xc3c40860
+        }
+    }
+    struct sockbuf so_snd = {
+        struct selinfo sb_sel = {
+            struct selfdlist si_tdlist = {
+                struct selfd *tqh_first = 0
+                struct selfd **tqh_last = 0
+            }
+            struct knlist si_note = {
+                struct klist kl_list = {
+                    struct knote *slh_first = 0
+                }
+                void (*)() kl_lock = 0xc03cd494
+                void (*)() kl_unlock = 0xc03cd550
+                void (*)() kl_assert_locked = 0xc03cd610
+                void (*)() kl_assert_unlocked = 0xc03cd614
+                void *kl_lockarg = 0xc3c40998
+                int kl_autodestroy = 0
+            }
+            struct mtx *si_mtx = 0
+        }
+        struct mtx sb_mtx = {
+            struct lock_object lock_object = {
+                const char *lo_name = 0xc081cab6
+                u_int lo_flags = 0x1030000
+                u_int lo_data = 0
+                struct witness *lo_witness = 0
+            }
+            volatile uintptr_t mtx_lock = 0x4
+        }
+        struct sx sb_sx = {
+            struct lock_object lock_object = {
+                const char *lo_name = 0xc081d7f7
+                u_int lo_flags = 0x2330000
+                u_int lo_data = 0
+                struct witness *lo_witness = 0
+            }
+            volatile uintptr_t sx_lock = 0x1
+        }
+        short sb_state = 0
+        struct mbuf *sb_mb = 0
+        struct mbuf *sb_mbtail = 0
+        struct mbuf *sb_lastrecord = 0
+        struct mbuf *sb_sndptr = 0
+        struct mbuf *sb_fnrdy = 0
+        u_int sb_sndptroff = 0
+        u_int sb_acc = 0
+        u_int sb_ccc = 0
+        u_int sb_hiwat = 0x2000
+dtrace -n 'fbt::soreceive_generic:entry /execname == ipc-static/ { print(*(struct socket*)arg0) }' &
+ipc/ipc-static -i local -b 16384 2proc && kill -2 1704
