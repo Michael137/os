@@ -64,29 +64,31 @@ def test(data1, data2, prop):
         # stat, p = stats.mannwhitneyu(res[1], res[1])
         # pvalues_mwu.append(p)
 
-        # print(str(k) + ":\n\t" + str(ttest.pvalue)+ " | " + str(p))
+        print(str(k) + ":\n\t" + str(ttest.pvalue))
     return pvalues_ttest
 
 toPlot = []
 #toPlot.append({'data':test(thread2_l1_refill_local, thread2_l1_refill_pipe, "l1d_refill"), 'lbl': "")
-toPlot.append({'data':test(thread2_local, proc2_local, "speeds"), 'lbl': ""})
-toPlot.append({'data':test(thread2_local_s, proc2_local_s, "speeds"), 'lbl': ""})
-toPlot.append({'data':test(thread2_local, thread2_local_s, "speeds"), 'lbl': ""})
-toPlot.append({'data':test(proc2_local, proc2_local_s, "speeds"), 'lbl': ""})
+toPlot.append({'data':test(thread2_local_s, proc2_local_s, "speeds"), 'lbl': "matching vs. non-matching socketpair"})
+toPlot.append({'data':test(thread2_local, proc2_local, "speeds"), 'lbl': "2thread vs. 2proc socketpair"})
+# toPlot.append({'data':test(thread2_local, thread2_local_s, "speeds"), 'lbl': ""})
+# toPlot.append({'data':test(proc2_local, proc2_local_s, "speeds"), 'lbl': ""})
 
-fig=plt.figure(figsize=(15, 18))
+fig=plt.figure(figsize=(18, 6))
 #ax1 = fig.add_subplot(2,1,1)
 #ax2 = fig.add_subplot(2,1,2)
 ax2 = fig.gca()
 ax2.grid()
+ax2.set_ylabel("Student t-test p values (log)")
+ax2.set_title("Student t-test for Socketpair Configurations")
+ax2.set_xlabel("Buffer Size (Bytes)")
+ax2.axhline(y=0.05, linestyle="--", color='c', label = "p = 0.05")
+ax2.axvline(x=65536, linestyle="--", color='r', label = "65 KB")
 
 for pl in toPlot:
-    ax2.semilogy(SIZES,pl['data'])
-    ax2.set_ylabel("Student t-test p values (log)")
-    ax2.set_title("Student t-test for Statistical Difference Between Socketpair Configurations")
-    ax2.set_xlabel("Buffer Size (Bytes)")
-    ax2.axhline(y=0.05, linestyle="--", color='c', label = "p = 0.05")
-    ax2.legend(["p-value of local with and without matching", "p = 0.05"])
+    ax2.semilogy(SIZES,pl['data'], label=pl['lbl'])
     ax2.set_xscale('log')
 
-fig.savefig("socketpairs_thread_models.png")
+ax2.legend(fancybox=True, framealpha=0.5, loc="best")
+
+fig.savefig("socketpair_matching_ttest.png")
