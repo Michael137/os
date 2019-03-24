@@ -3,7 +3,6 @@
 # I miss bash...
 sysctl kern.ipc.maxsockbuf=33554432
 
-# I miss bash...
 EXE=$1
 FLAGS=$2
 IPC=$3
