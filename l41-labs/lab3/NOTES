@@ -1,0 +1,83 @@
+tcp_state_transition stack traces:
+	dtrace -n 'fbt::tcp_state_change:entry { @[stack()] = count() }' &
+
+              kernel`tcp_state_change
+              kernel`sys_listen+0x88
+              kernel`swi_handler+0x6d8
+              kernel`swi_exit
+              kernel`swi_exit
+                1
+
+              kernel`tcp_state_change
+              kernel`tcp_usr_connect+0x144
+              kernel`kern_connectat+0xd0
+              kernel`sys_connect+0x94
+              kernel`swi_handler+0x6d8
+              kernel`swi_exit
+              kernel`swi_exit
+                1
+
+              kernel`tcp_state_change
+              kernel`tcp_input+0x1140
+              kernel`ip_input+0x1e4
+              kernel`netisr_dispatch_src+0xe0
+              kernel`dummynet_send+0x150
+              kernel`dummynet_task+0x438
+              kernel`taskqueue_run_locked+0x198
+              kernel`taskqueue_thread_loop+0x128
+              kernel`fork_exit+0xa0
+              kernel`swi_exit
+              kernel`swi_exit
+                1
+
+              kernel`tcp_state_change
+              kernel`tcp_input+0x1544
+              kernel`ip_input+0x1e4
+              kernel`netisr_dispatch_src+0xe0
+              kernel`dummynet_send+0x150
+              kernel`dummynet_task+0x438
+              kernel`taskqueue_run_locked+0x198
+              kernel`taskqueue_thread_loop+0x128
+              kernel`fork_exit+0xa0
+              kernel`swi_exit
+              kernel`swi_exit
+
+              kernel`tcp_state_change
+              kernel`tcp_disconnect+0x5c
+              kernel`tcp_usr_disconnect+0xf8
+              kernel`soclose+0x48
+              kernel`_fdrop+0x28
+              kernel`closef+0x420
+              kernel`closefp+0x10c
+              kernel`kern_close+0x140
+              kernel`swi_handler+0x6d8
+              kernel`swi_exit
+              kernel`swi_exit
+                2
+
+              kernel`tcp_state_change
+              kernel`tcp_do_segment+0x1f1c
+              kernel`tcp_input+0xf60
+              kernel`ip_input+0x1e4
+              kernel`netisr_dispatch_src+0xe0
+              kernel`dummynet_send+0x150
+              kernel`dummynet_task+0x438
+              kernel`taskqueue_run_locked+0x198
+              kernel`taskqueue_thread_loop+0x128
+              kernel`fork_exit+0xa0
+              kernel`swi_exit
+              kernel`swi_exit
+                2
+
+              kernel`tcp_state_change
+              kernel`tcp_input+0xf60
+              kernel`ip_input+0x1e4
+              kernel`netisr_dispatch_src+0xe0
+              kernel`dummynet_send+0x150
+              kernel`dummynet_task+0x438
+              kernel`taskqueue_run_locked+0x198
+              kernel`taskqueue_thread_loop+0x128
+              kernel`fork_exit+0xa0
+              kernel`swi_exit
+              kernel`swi_exit
+                3
