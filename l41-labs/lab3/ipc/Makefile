@@ -1,4 +1,4 @@
-all: ipc-static ipc-dynamic ipc-static-nonblock
+all: ipc-static ipc-dynamic ipc-static-nonblock ipc-static-nosleep
 
 CFLAGS=-DWITH_PMC -Wall
 
@@ -12,4 +12,8 @@ ipc-dynamic: ipc.c
 
 ipc-static-nonblock: ipc-nonblock.c
 	cc ${CFLAGS} -o ${.TARGET} -DPROGNAME=\"${.TARGET}\" ipc-nonblock.c -static \
+	    -lpmc -lpthread
+
+ipc-static-nosleep: ipc-nosleep.c
+	cc ${CFLAGS} -o ${.TARGET} -DPROGNAME=\"${.TARGET}\" ipc-nosleep.c -static \
 	    -lpmc -lpthread
