@@ -4,11 +4,11 @@
 #pragma D option bufresize=manual
 
 fbt::tcp_do_segment:entry
-/args[1]->th_sport == htons(10141)
-	&& args[3]->t_state != TCPS_ESTABLISHED/
+/args[1]->th_sport == htons(10141)/
 {
-	/*trace((unsigned int)args[1]->th_seq);
-	trace((unsigned int)args[1]->th_ack);*/
+	trace((unsigned int)args[1]->th_seq);
+	trace((unsigned int)args[1]->th_ack);
+	trace(walltimestamp);
 	trace(tcp_state_string[args[3]->t_state]);
 	printf("[%s", (args[1])->th_flags & TH_FIN ? "FIN|" : "");
 	printf("%s", (args[1])->th_flags & TH_SYN ? "SYN|" : "");
