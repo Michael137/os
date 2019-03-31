@@ -3,21 +3,31 @@
 
 BEGIN
 {
-	in_segment = 0;
-	wts = vtimestamp
+	initial_time = walltimestamp
 }
 
 fbt::tcp_do_segment:entry
-/args[1]->th_sport == htons(10141) ||
-	args[1]->th_dport == htons(10141)/
+/args[1]->th_sport == htons(10141)/
 {
-	in_segment = 1;
-
-	wts = vtimestamp;
+	printf("%s ", "sender->receiver");
 	printf("source:%d ", htons(args[1]->th_sport));
 	printf("dest:%d ", htons(args[1]->th_dport));
 	printf("Seq:%d ", (unsigned int)args[1]->th_seq);
 	printf("Ack:%d ", (unsigned int)args[1]->th_ack);
-	printf("Time:%d ", wts);
+	printf("Time:%d ", (walltimestamp - initial_time));
+	printf("ActualTime:%d ", walltimestamp);
+	trace(tcp_state_string[args[3]->t_state]);
+}
+
+fbt::tcp_do_segment:entry
+/args[1]->th_dport == htons(10141)/
+{
+	printf("%s ", "receiver->sender");
+	printf("source:%d ", htons(args[1]->th_sport));
+	printf("dest:%d ", htons(args[1]->th_dport));
+	printf("Seq:%d ", (unsigned int)args[1]->th_seq);
+	printf("Ack:%d ", (unsigned int)args[1]->th_ack);
+	printf("Time:%d ", (walltimestamp - initial_time));
+	printf("ActualTime:%d ", walltimestamp);
 	trace(tcp_state_string[args[3]->t_state]);
 }
