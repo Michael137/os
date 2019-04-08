@@ -24,3 +24,32 @@ Next step involves creating a minimal kernel from: boot.s, kernel.c and linker.l
 ** Assemble using: i686-elf-as boot.s -o boot.o
 
 # Implement the Kernel
+* Kernel is in kernel.c
+* Compile using: i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+# Write linker script for bootloader
+* Link together boot assembly and kernel
+* In linker.ld
+* i686-elf-gcc -T linker.ld -o <os_name>.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+
+# Building everything
+* gmake all
+* os image then now in bin/
+
+# Check for valid multiboot (version 1) header
+* grub-file --is-x86-multiboot bin/<os_name>.bin
+
+# Making iso
+* Needs xorriso, grub
+* Create grub.cfg
+* Create ISO:
+mkdir -p isodir/boot/grub
+cp myos.bin isodir/boot/myos.bin
+cp grub.cfg isodir/boot/grub/grub.cfg
+grub-mkrescue -o myos.iso isodir
+
+# Test OS
+* On QEMU:
+** gmake run
+** or qemu-system-i386 -kernel bin/myos.bin
+* On real hardware
