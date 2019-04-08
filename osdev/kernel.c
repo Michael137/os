@@ -51,7 +51,25 @@ size_t strlen(const char* str)
 		len++;
 	return len;
 }
- 
+
+// User has to make sure that str_out
+// is large enough to store integers.
+// Returns base-10 representation of
+// integer.
+char* stoi(int i, char* str_out) {
+	int ctr = 0;
+	while(i > 9)
+	{
+		str_out[ctr] = (i % 10) + '0';
+		i /= 10;
+		ctr++;
+	}
+	str_out[ctr] = i + '0';
+	str_out[ctr+1] = '\0';
+
+	return str_out;
+}
+
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
  
@@ -64,8 +82,8 @@ void terminal_initialize(void)
 {
 	terminal_row = 0;
 	terminal_column = 0;
-	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-	terminal_buffer = (uint16_t*) 0xB8000;
+	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREEN,VGA_COLOR_DARK_GREY);
+	terminal_buffer = (uint16_t*) 0xB8000; // Phyiscal location of buffer in VGA mode 3
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
@@ -92,11 +110,27 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 // enter character at last possible slot in row
 void terminal_putchar(char c) 
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH) {
+	if(c != '\n')
+		terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+	if ( ++terminal_column == VGA_WIDTH || c == '\n') {
 		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
+		if (++terminal_row == VGA_HEIGHT) {
+			// Shift all rows up by one
+			// XXX: memmove() instead?
+			for(size_t i = 0; i < VGA_HEIGHT - 1; ++i)
+			{
+				for(size_t j = 0; j < VGA_WIDTH; ++j)
+				{
+					size_t idx = i * VGA_WIDTH + j;
+					size_t next_idx = (i + 1) * VGA_WIDTH + j;
+					terminal_buffer[idx] = terminal_buffer[next_idx];
+				}
+			}
+			// Leave last row blank
+			terminal_row = VGA_HEIGHT - 1;
+			for(size_t j = 0; j < VGA_WIDTH; ++j)
+				terminal_putentryat(' ', terminal_color, j, terminal_row);
+		}
 	}
 }
  
@@ -113,13 +147,81 @@ void terminal_writestring(const char* data)
 {
 	terminal_write(data, strlen(data));
 }
- 
+
+/*
+ *
+ * |-------------|
+ * | ########### |
+ * |   ooooooo   |
+ * | ########### |
+ * |-------------|**
+ *              *****
+ *                ***
+ */
+void terminal_welcome_message()
+{
+	terminal_writestring("Welcome to OccamOs\n\n");
+	const size_t logo_width = 10;
+	// const size_t logo_height = 5;
+	const uint8_t old_color = terminal_color;
+	const uint8_t silver = vga_entry_color(VGA_COLOR_LIGHT_GREY,VGA_COLOR_LIGHT_GREY);
+	const uint8_t white = vga_entry_color(VGA_COLOR_WHITE,VGA_COLOR_WHITE);
+	const uint8_t black = vga_entry_color(VGA_COLOR_DARK_GREY,VGA_COLOR_DARK_GREY);
+	const uint8_t red = vga_entry_color(VGA_COLOR_RED,VGA_COLOR_RED);
+	terminal_setcolor(silver);
+	terminal_putchar('|');
+	for(size_t i = 0; i < logo_width - 2; ++i)
+		terminal_putchar('-');
+	terminal_putchar('|');
+	terminal_putchar('\n');
+
+	terminal_writestring("| ");
+	terminal_setcolor(white);
+	for(size_t i = 0; i < logo_width - 4; ++i)
+		terminal_putchar('#');
+	terminal_setcolor(silver);
+	terminal_writestring(" |");
+	terminal_putchar('\n');
+
+	terminal_writestring("|  ");
+	terminal_setcolor(black);
+	for(size_t i = 0; i < logo_width - 6; ++i)
+		terminal_putchar('o');
+	terminal_setcolor(silver);
+	terminal_writestring("  |");
+	terminal_putchar('\n');
+
+	terminal_writestring("| ");
+	terminal_setcolor(white);
+	for(size_t i = 0; i < logo_width - 4; ++i)
+		terminal_putchar('#');
+	terminal_setcolor(silver);
+	terminal_writestring(" |");
+	terminal_putchar('\n');
+
+	terminal_setcolor(silver);
+	terminal_putchar('|');
+	for(size_t i = 0; i < logo_width - 2; ++i)
+		terminal_putchar(' ');
+	terminal_setcolor(red);
+	terminal_writestring("***");
+	terminal_putchar('\n');
+
+	terminal_setcolor(old_color);
+	for(size_t i = 0; i < logo_width - 2; ++i)
+		terminal_putchar(' ');
+	terminal_setcolor(red);
+	terminal_writestring("*****");
+	terminal_putchar('\n');
+
+	terminal_color = old_color;
+}
+
 // Kernel entry point
 void kernel_main(void) 
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
  
-	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello, kernel World!\n");
+	terminal_welcome_message("Welcome to OccamOs\n\n");
 }

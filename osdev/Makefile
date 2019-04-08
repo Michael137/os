@@ -2,9 +2,9 @@ CROSS_PATH=$(HOME)/opt/cross
 CROSS_BIN=$(CROSS_PATH)/bin
 BIN_DIR=bin
 OBJ_DIR=obj
-OS_BIN_NAME=myos.bin
+OS_BIN_NAME=occamos.bin
 OS_BIN_PATH=$(BIN_DIR)/$(OS_BIN_NAME)
-ISO_NAME=myos.iso
+ISO_NAME=occamos.iso
 ISO_PATH=$(BIN_DIR)/$(ISO_NAME)
 
 OBJECTS := $(OBJ_DIR)/boot.o $(OBJ_DIR)/kernel.o $(OS_BIN_PATH)

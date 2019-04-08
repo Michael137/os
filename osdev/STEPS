@@ -44,12 +44,12 @@ Next step involves creating a minimal kernel from: boot.s, kernel.c and linker.l
 * Create grub.cfg
 * Create ISO:
 mkdir -p isodir/boot/grub
-cp myos.bin isodir/boot/myos.bin
+cp occamos.bin isodir/boot/occamos.bin
 cp grub.cfg isodir/boot/grub/grub.cfg
-grub-mkrescue -o myos.iso isodir
+grub-mkrescue -o occamos.iso isodir
 
 # Test OS
 * On QEMU:
 ** gmake run
-** or qemu-system-i386 -kernel bin/myos.bin
+** or qemu-system-i386 -kernel bin/occamos.bin
 * On real hardware
