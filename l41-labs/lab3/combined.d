@@ -12,7 +12,7 @@ fbt::tcp_do_segment:entry
 	printf("wnd:%d ", args[3]->snd_wnd);
 	printf("cwnd:%d ", args[3]->snd_cwnd);
 	printf("ssthresh:%d ", args[3]->snd_ssthresh);
-	trace(tcp_state_string[args[3]->t_state]);
+	/*trace(tcp_state_string[args[3]->t_state]);*/
 }
 
 fbt::tcp_do_segment:entry
@@ -26,5 +26,5 @@ fbt::tcp_do_segment:entry
 	printf("wnd:%d ", args[3]->snd_wnd);
 	printf("cwnd:%d ", args[3]->snd_cwnd);
 	printf("ssthresh:%d ", args[3]->snd_ssthresh);
-	trace(tcp_state_string[args[3]->t_state]);
+/*	trace(tcp_state_string[args[3]->t_state]);*/
 }

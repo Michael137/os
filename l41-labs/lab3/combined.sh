@@ -10,8 +10,8 @@ ifconfig lo0 mtu 1500
 
 for i in 0 5 10 15 20 25 30 35 40
 do
-	ipfw pipe config 1 delay i
-	ipfw pipe config 2 delay i
+	ipfw pipe config 1 delay ${i}
+	ipfw pipe config 2 delay ${i}
 	sysctl net.inet.tcp.hostcache.purgenow=1
 	OUT_FILE="combined_${i}.log"
 	cmd="./auto.sh combined.d ${OUT_FILE}"
