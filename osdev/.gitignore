@@ -3,3 +3,6 @@
 bin/
 *.out
 scratch/
+isodir/
+*.a
+*.d

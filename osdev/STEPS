@@ -53,3 +53,7 @@ grub-mkrescue -o occamos.iso isodir
 ** gmake run
 ** or qemu-system-i386 -kernel bin/occamos.bin
 * On real hardware
+
+# Current installation (simply invoke build.sh, iso.sh or qemu.sh):
+* config.sh->headers.sh->build.sh->iso.sh->qemu.sh
+* TODO: use makefile instead of shell scripts?
