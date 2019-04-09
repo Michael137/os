@@ -6,3 +6,4 @@ scratch/
 isodir/
 *.a
 *.d
+sysroot/
