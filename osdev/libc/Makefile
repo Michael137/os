@@ -30,18 +30,17 @@ CFLAGS:=$(CLFAGS) $(ARCH_CFLAGS)
 LIBK_CFLAGS:=$(LIBK_CFLAGS) $(KERNEL_ARCH_CFLAGS)
 
 FREEOBJS=\
-$(ARCH_FREEOBJS) \
-stdio/putchar.o \
-string/strlen.o \
-string/stoi.o
-
-#		 stdio/puts.o \
-#		 stdio/printf.o \
-#		 stdlib/abort.o \
-#		 string/memcmp.o \
-#		 string/memcpy.o \
-#		 string/memmove.o \
-#		 string/memset.o \
+	$(ARCH_FREEOBJS) \
+	stdlib/abort.o \
+	string/memcmp.o \
+	string/memcpy.o \
+	string/memmove.o \
+	string/strlen.o \
+	string/memset.o \
+	string/stoi.o \
+	stdio/putchar.o \
+	stdio/printf.o \
+	stdio/puts.o
 
 HOSTEDOBJS=\
 $(ARCH_HOSTEDOBJS)

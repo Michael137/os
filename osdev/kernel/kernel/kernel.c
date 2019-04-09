@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 
 #include <kernel/tty.h>
  
@@ -19,4 +20,7 @@ void kernel_main(void)
 	terminal_initialize();
  
 	terminal_welcome_message("Welcome to OccamOs\n\n");
+	puts("");
+	puts("");
+	printf("by %s%d\n", "gardei", 137);
 }

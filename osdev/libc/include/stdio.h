@@ -5,8 +5,8 @@
 
 #define EOF (-1)
 
-// int printf(char* const __restrict, ...);
+int printf(const char* restrict, ...);
 int putchar(int);
-// int puts(const char*);
+int puts(const char*);
 
 #endif // STDIO_H_IN

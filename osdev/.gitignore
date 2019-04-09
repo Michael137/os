@@ -7,3 +7,4 @@ isodir/
 *.a
 *.d
 sysroot/
+*.iso
