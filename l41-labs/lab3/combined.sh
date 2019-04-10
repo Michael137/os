@@ -12,18 +12,16 @@ for i in 0 5 10 15 20 25 30 35 40
 do
 	ipfw pipe config 1 delay ${i}
 	ipfw pipe config 2 delay ${i}
-	sysctl net.inet.tcp.hostcache.purgenow=1
-	OUT_FILE="combined_${i}.log"
-	cmd="./auto.sh combined.d ${OUT_FILE}"
+	for k in `seq 10`
+	do
+		sysctl net.inet.tcp.hostcache.purgenow=1
+		OUT_FILE="combined_${i}_${k}.log"
+		cmd="./auto.sh combined.d ${OUT_FILE}"
 
-	echo "Executing ${cmd}"
-	${cmd}
+		echo "Executing ${cmd} (run ${k})"
+		${cmd}
 
-#	file_busy_cmd="fuser -f ${OUT_FILE} | wc -w"
-#	while [ file_busy_cmd != 0 ]
-#	do
-#		echo "sleeping" && sleep 2
-#	done
-	sleep 20
-	ps | grep dtrace | grep -v grep | awk '{print $1}' | xargs kill -9
+		sleep 20
+		ps | grep dtrace | grep -v grep | awk '{print $1}' | xargs kill -9
+	done
 done
