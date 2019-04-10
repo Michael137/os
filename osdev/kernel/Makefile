@@ -27,16 +27,29 @@ LDFLAGS:=$(LDFLAGS) $(KERNEL_ARCH_LDFLAGS)
 LIBS:=$(LIBS) $(KERNEL_ARCH_LIBS)
 
 KERNEL_OBJS=\
-$(KERNEL_ARCH_OBJS) \
-kernel/kernel.o
+	$(KERNEL_ARCH_OBJS) \
+	kernel/kernel.o
 
+# NOTE: crt*.o files have to be linked in the order below
+#       as defined by the Sys V ABI.
+#       Useful reference: https://wiki.osdev.org/Calling_Global_Constructors
+#
+#       crt0.o in our kernel is in boot.S since that's where _start is defined
 OBJS=\
-$(KERNEL_OBJS)
+	$(ARCHDIR)/crti.o \
+	$(ARCHDIR)/crtbegin.o \
+	$(KERNEL_OBJS) \
+	$(ARCHDIR)/crtend.o \
+	$(ARCHDIR)/crtn.o
 
 LINKER_OPTIONS=\
-$(LDFLAGS) \
-$(KERNEL_OBJS) \
-$(LIBS)
+	$(LDFLAGS) \
+	$(ARCHDIR)/crti.o \
+	$(ARCHDIR)/crtbegin.o \
+	$(KERNEL_OBJS) \
+	$(LIBS) \
+	$(ARCHDIR)/crtend.o \
+	$(ARCHDIR)/crtn.o
 
 .PHONY: all clean install install-headers install-kernel
 .SUFFIXES: .o .libk.o .c .S
@@ -46,6 +59,11 @@ all: $(OS_NAME).kernel
 $(OS_NAME).kernel: $(OBJS) $(ARCHDIR)/linker.ld
 	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(LINKER_OPTIONS)
 	# grub-file --is-x86-multiboot $(OS_NAME).kernel # Check for valid Multiboot header
+
+# gcc -print-file-name is used to get the path of the
+# compiler generated crtbegin.o and crtend.o
+$(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
+	OBJ=`$(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
 .c.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS)

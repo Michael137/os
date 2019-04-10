@@ -37,6 +37,7 @@ FREEOBJS=\
 	string/memmove.o \
 	string/strlen.o \
 	string/memset.o \
+	string/strrev.o \
 	string/stoi.o \
 	stdio/putchar.o \
 	stdio/printf.o \

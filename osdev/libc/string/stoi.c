@@ -4,7 +4,7 @@
 // is large enough to store integers.
 // Returns base-10 representation of
 // integer.
-char* stoi(int i, char* str_out) {
+char* itoa(int i, char* str_out) {
 	int ctr = 0;
 	while(i > 9)
 	{
@@ -14,6 +14,8 @@ char* stoi(int i, char* str_out) {
 	}
 	str_out[ctr] = i + '0';
 	str_out[ctr+1] = '\0';
+
+	strrev(str_out);
 
 	return str_out;
 }

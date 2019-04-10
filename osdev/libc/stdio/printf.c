@@ -70,7 +70,7 @@ int printf(const char* restrict format, ...) {
 				len++;
 			len++; // For '\0'
 			char str[len];
-			stoi(num, str);
+			itoa(num, str);
 			if (maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
