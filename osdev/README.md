@@ -8,3 +8,4 @@ OccamOS (occam operating system)
 * Convenient shell and exposure to OS incl. draw routines
 * Searchable and transparent
 * For developers
+* Files should be accessible from anywhere at any time. No more redundant cd's (related to filed)
