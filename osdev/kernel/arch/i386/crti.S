@@ -1,3 +1,7 @@
+# Set up stack as usual with function calls
+# 1. push stack base address (to which we later return to in crtn.S)
+# 2. create stack frame
+
 .section .init
 .global _init
 .type _init, @function
