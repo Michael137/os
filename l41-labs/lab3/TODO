@@ -2,6 +2,7 @@
 - Plot two directions of TCP state machine
   - client vs. server
   - TCP header flags (or syscall/timer) of received packet cause the transition
+  - Instrument headers in syncache
   - Compare to RFC 793
 - Affect of latency on state machine (0-40ms)
 - Probe effect
