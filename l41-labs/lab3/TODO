@@ -1,22 +1,25 @@
-- State machine behaviour use -B -q
+* State machine behaviour use -B -q
 - Plot two directions of TCP state machine
-  - client vs. server
+  * client vs. server
   - TCP header flags (or syscall/timer) of received packet cause the transition
   - Instrument headers in syncache
   - Compare to RFC 793
 - Affect of latency on state machine (0-40ms)
-- Probe effect
-- ipc/ipc-static -B -q -i tcp 2thread
+* Probe effect
+* ipc/ipc-static -B -q -i tcp 2thread
 
-- Only I/O loop analysis
-- ipc/ipc-static -i tcp -b 1048576 (-s) 2thread
-- Flush cache
+* Only I/O loop analysis
+* ipc/ipc-static -i tcp -b 1048576 (-s) 2thread
+* Flush cache
+* Bandwidth vs. Latency [0-40ms] (with and without resizing)
+* Bandwidth vs. Real-time (with and without resizing)
+  * Stack congestion and last received windows graph
 - Only consider tcp steady state (i.e. no handshake or connection close)
-- Bandwidth vs. Latency [0-40ms] (with and without resizing)
-- Bandwidth vs. Real-time (with and without resizing)
-  - Stack congestion and last received windows graph
-- Sequence Number vs. Real-time (with and without resizing)
+~ Sequence Number vs. Real-time (with and without resizing)
   - Few packets past slow start
-  - 10ms and 20ms RTT (i.e. 5 and 10ms latency)
+  * 10ms and 20ms RTT (i.e. 5 and 10ms latency)
   - Effect of latency on time to enter steady state
     - Then effect on bandwidth
+
+*: denotes completed tasks
+~: double check with lecturer
