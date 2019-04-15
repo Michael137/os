@@ -47,7 +47,7 @@ ax2.axvline(x=25, linestyle="--", color='r', label = "25 ms")
 
 for pl in toPlot:
     ax2.semilogy(LATENCIES,pl['data'], label=pl['lbl'])
-    ax2.set_xscale('log')
+    # ax2.set_xscale('log')
 
 ax2.legend(fancybox=True, framealpha=0.5, loc="best")
 
