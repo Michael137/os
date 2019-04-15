@@ -38,7 +38,8 @@ _start:
 	/* Here we set up the stack */
 	   mov $stack_top, %esp
 
-		# TODO: could call global constructors here
+	/* Call global constructors */
+	call _init
 
 	/* Enter high-level kernel. ABI requires the stack is 16-byte
 	   aligned at the time of the call instruction. */

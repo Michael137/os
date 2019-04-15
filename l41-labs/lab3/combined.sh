@@ -15,8 +15,12 @@ do
 	for k in `seq 10`
 	do
 		sysctl net.inet.tcp.hostcache.purgenow=1
-		OUT_FILE="combined_${i}_${k}.log"
-		cmd="./auto.sh combined.d ${OUT_FILE}"
+		if [ ! -z "${1}" ]; then
+			OUT_FILE="combined_${i}_${k}_${1}.log"
+		else
+			OUT_FILE="combined_${i}_${k}.log"
+		fi
+		cmd="./auto.sh combined.d ${OUT_FILE} ${1}"
 
 		echo "Executing ${cmd} (run ${k})"
 		${cmd}
