@@ -20,6 +20,20 @@
   * 10ms and 20ms RTT (i.e. 5 and 10ms latency)
   - Effect of latency on time to enter steady state
     - Then effect on bandwidth
+  - graph bytes-in-flight
 
 *: denotes completed tasks
 ~: double check with lecturer
+#####
+
+FreBSD maximum segment lifetime (MSL): 30 seconds
+sysctl net.inet.ip | grep forward
+sysctl net.isr.direct
+net.inet.tcp.recvspace: 65536
+net.inet.tcp.recvbuf_max: 2097152
+net.inet.tcp.recvbuf_auto: 1
+net.inet.tcp.sendspace: 32768
+net.inet.tcp.sendbuf_max: 2097152
+net.inet.tcp.sendbuf_auto: 1
+net.inet.sctp.initial_cwnd: 3
+net.inet.tcp.initcwnd_segments: 10
