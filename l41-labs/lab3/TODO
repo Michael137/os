@@ -35,5 +35,8 @@ net.inet.tcp.recvbuf_auto: 1
 net.inet.tcp.sendspace: 32768
 net.inet.tcp.sendbuf_max: 2097152
 net.inet.tcp.sendbuf_auto: 1
-net.inet.sctp.initial_cwnd: 3
 net.inet.tcp.initcwnd_segments: 10
+net.inet.tcp.drop_synfin: 0
+net.inet.tcp.ecn.enable: 2 (described in tcp(4) man page)
+net.inet.tcp.minmss: 216
+net.inet.sctp.initial_cwnd: 3
