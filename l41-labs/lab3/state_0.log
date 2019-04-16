@@ -1,0 +1,13 @@
+CPU     ID                    FUNCTION:NAME
+  0   7373           tcp_state_change:entry { "time":"1485554771567691457", "local_port":"10141", "foreign_port":"0", "previous_tcp_state":"state-closed", "tcp_state":"state-listen" }
+  0   7373           tcp_state_change:entry { "time":"1485554771567691457", "local_port":"27932", "foreign_port":"10141", "previous_tcp_state":"state-closed", "tcp_state":"state-syn-sent" }
+  0   7373           tcp_state_change:entry { "time":"1485554771567691457", "local_port":"27932", "foreign_port":"10141", "previous_tcp_state":"state-syn-sent", "tcp_state":"state-established" }
+  0   7373           tcp_state_change:entry { "time":"1485554771567691457", "local_port":"10141", "foreign_port":"27932", "previous_tcp_state":"state-closed", "tcp_state":"state-syn-received" }
+  0   7373           tcp_state_change:entry { "time":"1485554771567691457", "local_port":"10141", "foreign_port":"27932", "previous_tcp_state":"state-syn-received", "tcp_state":"state-established" }
+speed: 26696.04 KBytes/sec
+root@l41-beaglebone:/data/lab3 #
+  0   7373           tcp_state_change:entry { "time":"1485554774197690916", "local_port":"27932", "foreign_port":"10141", "previous_tcp_state":"state-established", "tcp_state":"state-fin-wait-1" }
+  0   7373           tcp_state_change:entry { "time":"1485554774197690916", "local_port":"10141", "foreign_port":"27932", "previous_tcp_state":"state-established", "tcp_state":"state-close-wait" }
+  0   7373           tcp_state_change:entry { "time":"1485554774197690916", "local_port":"27932", "foreign_port":"10141", "previous_tcp_state":"state-fin-wait-1", "tcp_state":"state-fin-wait-2" }
+  0   7373           tcp_state_change:entry { "time":"1485554774197690916", "local_port":"10141", "foreign_port":"27932", "previous_tcp_state":"state-close-wait", "tcp_state":"state-last-ack" }
+  0   7373           tcp_state_change:entry { "time":"1485554774197690916", "local_port":"27932", "foreign_port":"10141", "previous_tcp_state":"state-fin-wait-2", "tcp_state":"state-time-wait" }

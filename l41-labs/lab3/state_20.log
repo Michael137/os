@@ -1,0 +1,14 @@
+CPU     ID                    FUNCTION:NAME
+  0   7373           tcp_state_change:entry { "time":"1485555020757924166", "local_port":"10141", "foreign_port":"0", "previous_tcp_state":"state-closed", "tcp_state":"state-listen" }
+  0   7373           tcp_state_change:entry { "time":"1485555020757924166", "local_port":"17166", "foreign_port":"10141", "previous_tcp_state":"state-closed", "tcp_state":"state-syn-sent" }
+  0   7373           tcp_state_change:entry { "time":"1485555020838278457", "local_port":"17166", "foreign_port":"10141", "previous_tcp_state":"state-syn-sent", "tcp_state":"state-established" }
+  0   7373           tcp_state_change:entry { "time":"1485555020878279041", "local_port":"10141", "foreign_port":"17166", "previous_tcp_state":"state-closed", "tcp_state":"state-syn-received" }
+  0   7373           tcp_state_change:entry { "time":"1485555020878279041", "local_port":"10141", "foreign_port":"17166", "previous_tcp_state":"state-syn-received", "tcp_state":"state-established" }
+speed: 2423.67 KBytes/sec
+root@l41-beaglebone:/data/lab3 #
+  0   7373           tcp_state_change:entry { "time":"1485555029658278499", "local_port":"17166", "foreign_port":"10141", "previous_tcp_state":"state-established", "tcp_state":"state-fin-wait-1" }
+  0   7373           tcp_state_change:entry { "time":"1485555029658278499", "local_port":"10141", "foreign_port":"17166", "previous_tcp_state":"state-established", "tcp_state":"state-fin-wait-1" }
+  0   7373           tcp_state_change:entry { "time":"1485555029698278207", "local_port":"10141", "foreign_port":"17166", "previous_tcp_state":"state-fin-wait-1", "tcp_state":"state-closing" }
+  0   7373           tcp_state_change:entry { "time":"1485555029698278207", "local_port":"17166", "foreign_port":"10141", "previous_tcp_state":"state-fin-wait-1", "tcp_state":"state-closing" }
+  0   7373           tcp_state_change:entry { "time":"1485555029738278582", "local_port":"17166", "foreign_port":"10141", "previous_tcp_state":"state-closing", "tcp_state":"state-time-wait" }
+  0   7373           tcp_state_change:entry { "time":"1485555029738278582", "local_port":"10141", "foreign_port":"17166", "previous_tcp_state":"state-closing", "tcp_state":"state-time-wait" }
