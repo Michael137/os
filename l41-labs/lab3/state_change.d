@@ -47,10 +47,11 @@ fbt::syncache_expand:entry
 	stack();
 }
 
-/*
+
 fbt::tcp_do_segment:entry
-/args[1]->th_sport == htons(10141)
-	|| args[1]->th_dport == htons(10141)/
+/(args[1]->th_sport == htons(10141)
+	|| args[1]->th_dport == htons(10141))
+	&& !(args[3]->t_state == TCPS_ESTABLISHED && ((args[1])->th_flags & TH_ACK))/
 {
 	trace(tcp_state_string[args[3]->t_state]);
 	printf("[%s", (args[1])->th_flags & TH_FIN ? "FIN|" : "");
@@ -62,4 +63,4 @@ fbt::tcp_do_segment:entry
 	printf("%s", (args[1])->th_flags & TH_ECE ? "ECE|" : "");
 	printf("%s]", (args[1])->th_flags & TH_CWR ? "CWR" : "");
 }
-*/
+
