@@ -1,28 +1,27 @@
-* State machine behaviour use -B -q
-- Plot two directions of TCP state machine
-  * client vs. server
-  + TCP header flags (or syscall/timer) of received packet cause the transition
-  * Instrument headers in syncache
+= State machine behaviour use -B -q
+= Plot two directions of TCP state machine
+  = client vs. server
+  = TCP header flags (or syscall/timer) of received packet cause the transition
+  = Instrument headers in syncache
   + Compare to RFC 793
-* Affect of latency on state machine (0-40ms)
-=> For higher latencies we get more cases of simultaneous close
-=> more PUSH flags at lower latencies
-* Probe effect
-* ipc/ipc-static -B -q -i tcp 2thread
+= Affect of latency on state machine (0-40ms)
+= Probe effect
+= ipc/ipc-static -B -q -i tcp 2thread
 
-* Only I/O loop analysis
-* ipc/ipc-static -i tcp -b 1048576 (-s) 2thread
-* Flush cache
+= Only I/O loop analysis
+= ipc/ipc-static -i tcp -b 1048576 (-s) 2thread
+= Flush cache
 = Bandwidth vs. Latency [0-40ms] (with and without resizing)
-* Bandwidth vs. Real-time (with and without resizing)
-  * Stack congestion and last received windows graph
-- Only consider tcp steady state (i.e. no handshake or connection close)
-~ Sequence Number vs. Real-time (with and without resizing)
-  - Few packets past slow start
-  * 10ms and 20ms RTT (i.e. 5 and 10ms latency)
+= Bandwidth vs. Real-time (with and without resizing)
+  = Stack congestion and last received windows graph
+  - find point at which slow-start occurs
+= Only consider tcp steady state (i.e. no handshake or connection close)
+= Sequence Number vs. Real-time (with and without resizing)
+  = Few packets past slow start
+  = 10ms and 20ms RTT (i.e. 5 and 10ms latency)
   - Effect of latency on time to enter steady state
     - Then effect on bandwidth
-  - graph bytes-in-flight
+  x graph bytes-in-flight
 
 = Probe effect: DUMMYNET, DTrace
 = Statistical analysis
@@ -31,6 +30,7 @@
 ~: double check with lecturer
 +: by hand
 =: already in report
+x: wont do
 #####
 
 FreBSD maximum segment lifetime (MSL): 30 seconds
@@ -73,4 +73,3 @@ Where is cwnd set?:
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_var.h
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_output.c
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_input.c
-				
