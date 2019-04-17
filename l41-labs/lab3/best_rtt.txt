@@ -1,0 +1,67 @@
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_rttbest) }' &
+[2] 1564
+root@l41-beaglebone:/data/lab3 # dtrace: description 'fbt::tcp_do_segment:entry ' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered ipc/ipc-static -i tcp 2thread && kill -2 $!                         speed: 21663.45 KBytes/sec
+root@l41-beaglebone:/data/lab3 # 
+
+
+           value  ------------- Distribution ------------- count    
+              -1 |                                         0        
+               0 |                                         2        
+               1 |                                         0        
+               2 |                                         0        
+               4 |                                         0        
+               8 |@@@@@@@@@@@@@                            5890     
+              16 |@@@@@@@@@@@@@@@@@@@@@@@@@@@              11662    
+              32 |                                         0        
+
+
+[2]    Done                          dtrace -n fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_rttbest) }
+root@l41-beaglebone:/data/lab3 # ipfw pipe config 1 delay 20;ipfw pipe config 2 delay 20
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_rttbest) }' &
+[2] 1568
+root@l41-beaglebone:/data/lab3 # dtrace: description 'fbt::tcp_do_segment:entry ' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered ipc/ipc-static -i tcp 2thread && kill -2 $!
+speed: 6090.69 KBytes/sec
+root@l41-beaglebone:/data/lab3 # 
+
+
+           value  ------------- Distribution ------------- count    
+              -1 |                                         0        
+               0 |                                         2        
+               1 |                                         0        
+               2 |                                         0        
+               4 |                                         0        
+               8 |                                         0        
+              16 |                                         0        
+              32 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 17639    
+              64 |                                         0        
+
+
+[2]    Done                          dtrace -n fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_rttbest) }
+root@l41-beaglebone:/data/lab3 # ipfw pipe config 1 delay 40 ; ipfw pipe config 2 delay 40
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_rttbest) }' &
+[2] 1572
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_rttbest) }' &dtrace: description 'fbt::tcp_do_segment:entry ' matched 1 probe
+dtrace: buffer size lowered to 2m  c/ipc-static -i tcp 2thread && kill -2 $!
+speed: 2879.41 KBytes/sec
+root@l41-beaglebone:/data/lab3 # 
+
+
+           value  ------------- Distribution ------------- count    
+              -1 |                                         0        
+               0 |                                         2        
+               1 |                                         0        
+               2 |                                         0        
+               4 |                                         0        
+               8 |                                         0        
+              16 |                                         0        
+              32 |                                         0        
+              64 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 17473    
+             128 |                                         0        
+
+
+[2]    Done                          dtrace -n fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_rttbest) }
+

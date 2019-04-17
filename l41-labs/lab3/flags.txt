@@ -1,0 +1,73 @@
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_flags & 0x100000) }' &[2] 1936
+root@l41-beaglebone:/data/lab3 # dtrace: description 'fbt::tcp_do_segment:entry ' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+
+root@l41-beaglebone:/data/lab3 # ipc/ipc-static -i tcp -b 1048576 2thread && kill -2 $!
+speed: 391.58 KBytes/sec
+root@l41-beaglebone:/data/lab3 # 
+
+
+           value  ------------- Distribution ------------- count    
+              -1 |                                         0        
+               0 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 17757    
+               1 |                                         0        
+                                 ipfw pipe config 1 delay 10 ; ipfw pipe config 2 delay 10
+[2]  - Done                          dtrace -n fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_flags & 0x100000) }
+root@l41-beaglebone:/data/lab3 # 
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_dupacks)}
+Unmatched '.
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_dupacks)}'
+dtrace: description 'fbt::tcp_do_segment:entry ' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+^C
+
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_dupacks)}' &
+[2] 1941
+root@l41-beaglebone:/data/lab3 # dtrace: description 'fbt::tcp_do_segment:entry ' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered ipc/ipc-static -i tcp -b 1048576 2thread && kill -2 $!
+speed: 4602.10 KBytes/sec
+root@l41-beaglebone:/data/lab3 # 
+
+
+           value  ------------- Distribution ------------- count    
+              -1 |                                         0        
+               0 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  17304    
+               1 |                                         12       
+               2 |                                         4        
+               4 |                                         6        
+               8 |                                         8        
+              16 |                                         16       
+              32 |                                         32       
+              64 |                                         64       
+             128 |                                         128      
+             256 |                                         2        
+             512 |                                         0        
+
+
+[2]    Done                          dtrace -n fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_dupacks)}
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_flags & 0x000200) }' &
+[2] 1943
+root@l41-beaglebone:/data/lab3 # dtrace: description 'fbt::tcp_do_segment:entry ' matched 1 probe
+dtrace: buffer size lowered to 2m
+dtrace: aggregation size lowered to 2m
+
+root@l41-beaglebone:/data/lab3 # ipc/ipc-static -i tcp -b 1048576 2thread && kill -2 $!              speed: 5217.77 KBytes/sec
+root@l41-beaglebone:/data/lab3 # 
+
+
+           value  ------------- Distribution ------------- count    
+             256 |                                         0        
+             512 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 17602    
+            1024 |                                         0        
+
+.
+.: Command not found.
+[2]  - Done                          dtrace -n fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_flags & 0x000200) }
+root@l41-beaglebone:/data/lab3 # dtrace -n 'fbt::tcp_do_segment:entry / args[1]->th_dport == htons(10141) || args[1]->th_sport == htons(10141)/ { @ = quantize((u_int) args[3]->t_flags & 0x000200) }' &
+root@l41-beaglebone:/data/lab3 # sysctl -a | grep rfc3042
+net.inet.tcp.rfc3042: 1
+root@l41-beaglebone:/data/lab3 # 
+

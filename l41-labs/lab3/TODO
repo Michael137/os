@@ -49,4 +49,28 @@ net.inet.tcp.minmss: 216
 net.inet.sctp.initial_cwnd: 3
 net.inet.tcp.delayed_ack: 1
 
+sysctla -a | grep rfc
+
 disabling Nagle's algorithm not effective (TCP_NODELAY)
+########
+send socket buffer resizing:
+tcp_sndbuf_autoscale: tcp_output.c
+
+slow-start initial config:
+cc_conn_init
+
+int tcp_compute_initwnd (in tcp_input.c) initial cwnd size is calculated using following codepath:
+	if (V_tcp_initcwnd_segments)
+		return min(V_tcp_initcwnd_segments * maxseg,
+			max(2 * maxseg, V_tcp_initcwnd_segments * 1460));
+
+Where is cwnd set?:
+	LINE 2470:
+		TF_SACK_PERMIT enabled
+			FAST_RECOVERY disabled
+			LINE 2605: rfc3042 enabled
+				LINE 2629+ cwnd increased by to account for dupacks
+https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_var.h
+https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_output.c
+https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_input.c
+				
