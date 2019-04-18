@@ -73,3 +73,4 @@ Where is cwnd set?:
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_var.h
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_output.c
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_input.c
+http://www.ico.aha.ru/h/The_Design_and_Implementation_of_the_FreeBSD_Operating_System/ch13lev1sec7.htm
