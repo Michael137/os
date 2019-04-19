@@ -1,0 +1,33 @@
+BEGIN
+{
+	ts = 0;
+	in_bench = 0;
+}
+
+syscall::clock_gettime:return
+/!in_bench && execname == "ipc-static"/
+{
+	in_bench = 1
+}
+
+fbt::*tcp*:entry
+/in_bench && execname == "intr"/
+{
+	@counts["counts", probefunc] = count();
+	ts = timestamp;
+}
+
+fbt::*tcp*:return
+/in_bench && execname == "intr"/
+{
+	@total["times", probefunc] = sum(timestamp - ts);
+}
+
+syscall::clock_gettime:entry
+/in_bench && execname == "ipc-static"/
+{
+	in_bench = 0;
+	printa(@total);
+	printa(@counts);
+	exit(0);
+}
