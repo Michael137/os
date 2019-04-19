@@ -20,6 +20,7 @@ do
 		else
 			OUT_FILE="latency_${i}_${k}.log"
 		fi
+
 		rm -f ${OUT_FILE}
 
 		echo "Executing ${cmd} (run ${k})"
