@@ -51,6 +51,9 @@ net.inet.tcp.delayed_ack: 1
 
 sysctla -a | grep rfc
 
+rfc3465-> ABC enabled
+sysctl -a | grep net.inet.tcp.cc
+
 disabling Nagle's algorithm not effective (TCP_NODELAY)
 ########
 send socket buffer resizing:
@@ -74,3 +77,21 @@ https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_var.h
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_output.c
 https://github.com/freebsd/freebsd/blob/master/sys/netinet/tcp_input.c
 http://www.ico.aha.ru/h/The_Design_and_Implementation_of_the_FreeBSD_Operating_System/ch13lev1sec7.htm
+
+
+INSTRUMENT: tcp_xmit_timer, where is srtt used and calculated, how often is tcp_input/tcp_output called with different latencies
+
+#####
+
+Sequence diagram:
+
+Intuitively the sequence numbers and acknowledgements should at every time-step increase linearly throughout the lifetime of the connection. Additionally we expect to see a delay between the transmission of a TCP segment and the acknowledgement by the receiver. In the case 5 ms latency (10 ms RTT) we detect two differences to the ideal behaviour. On FIGURE we see the time for TCP to reach the linear congestion window increase of congestion avoidance is minimal and occurs in a fraction of a nanosecond. On our plot of this connection's receive and congestion window updates as seen by the sender we see that the exponential increase of cwnd performed by slow-start is barely visible at our granularity of measurement. Furthermore, many of the sequence numbers are acknowledged at the same timestamp. At low latency the receive window continuously emptied across the whole lifetime of the connection indicated by the fluctation of the wnd size between SIZE and SIZE. (INSTRUMENT TCP INPUT/OUTPUT pattern)
+
+Throughput vs. Latency:
+The congestion window is resized based upon the current phase of congestion control, the congestion control algorithm used and metrics collected by tcp throughout the connection lifetime. During slow-start the congestion window is increased exponentially until a timeout occurs but not beyond the advertised receive window size and the slow-start threshold (snd\_ssthresh). Once snd\_ssthresh is reached or a timeout occurred the congestion window gradually increases. The actual window updates are performed within tcp\_input.
+
+Although our benchmarks inject a DUMMYNET latency of 0-40 ms
+
+
+Future work:
+better granularity of latency injection and measurement
