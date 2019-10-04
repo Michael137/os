@@ -9,3 +9,5 @@ OccamOS (occam operating system)
 * Searchable and transparent
 * For developers
 * Files should be accessible from anywhere at any time. No more redundant cd's (related to filed)
+* Instrumentable, debuggable, profileable
+* Accelerator coordination
