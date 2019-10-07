@@ -1,0 +1,7 @@
+Total number of instructions executed = 615024
+	Loads caused: 106302
+	Stores caused: 132756
+	Control Flow: 80284
+		Branches: 15047
+		Calls: 65237
+

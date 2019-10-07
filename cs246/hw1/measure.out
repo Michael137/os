@@ -1,0 +1,11 @@
+
+ Performance counter stats for '/bin/ls':
+
+            462917      mem_inst_retired.all_loads                                   
+            221128      mem_inst_retired.all_stores                                   
+            339339      br_inst_retired.all_branches                                   
+           1747492      instructions                                                
+
+       0.001870085 seconds time elapsed
+
+Tue Sep 17 17:24:43 EDT 2019

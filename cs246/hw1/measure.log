@@ -1,0 +1,49 @@
+000 (076.000.000) 09/17 17:23:32 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=7261_0541_4>
+...
+001 (076.000.000) 09/17 17:23:50 Job executing on host: <172.31.57.97:9618?addrs=172.31.57.97-9618&noUDP&sock=1894_b476_3>
+...
+006 (076.000.000) 09/17 17:23:51 Image size of job updated: 88
+	1  -  MemoryUsage of job (MB)
+	88  -  ResidentSetSize of job (KB)
+...
+005 (076.000.000) 09/17 17:23:51 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	201249  -  Run Bytes Sent By Job
+	209  -  Run Bytes Received By Job
+	201249  -  Total Bytes Sent By Job
+	209  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :                96        96 
+	   Disk (KB)            :      206        1      5089 
+	   Memory (MB)          :        1        1       128 
+...
+000 (077.000.000) 09/17 17:24:42 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=7261_0541_4>
+...
+001 (077.000.000) 09/17 17:24:43 Job executing on host: <172.31.57.97:9618?addrs=172.31.57.97-9618&noUDP&sock=1894_b476_3>
+...
+006 (077.000.000) 09/17 17:24:43 Image size of job updated: 56
+	1  -  MemoryUsage of job (MB)
+	56  -  ResidentSetSize of job (KB)
+...
+005 (077.000.000) 09/17 17:24:44 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	461  -  Run Bytes Sent By Job
+	211  -  Run Bytes Received By Job
+	461  -  Total Bytes Sent By Job
+	211  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :                96        96 
+	   Disk (KB)            :       10        1      5089 
+	   Memory (MB)          :        1        1       128 
+...
+009 (034.000.000) 09/18 00:51:52 Job was aborted by the user.
+	via condor_rm (by user condor)
+...
