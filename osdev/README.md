@@ -10,4 +10,5 @@ OccamOS (occam operating system)
 * For developers
 * Files should be accessible from anywhere at any time. No more redundant cd's (related to filed)
 * Fully transparent: limited abstraction of hardware interface
-* Instrumentable by construction
+* Instrumentable, debuggable, profileable by construction
+* Accelerator coordination
