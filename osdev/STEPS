@@ -57,3 +57,7 @@ grub-mkrescue -o occamos.iso isodir
 # Current installation (simply invoke build.sh, iso.sh or qemu.sh):
 * config.sh->headers.sh->build.sh->iso.sh->qemu.sh
 * TODO: use makefile instead of shell scripts?
+
+# Common errors
+* xorriso complaints when running grub2-mkcfg
+  * Simply get latest xorriso using package manager (likely it is not even installed on the system yet, contrary to what the warning implies)
