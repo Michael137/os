@@ -59,25 +59,6 @@ struct entry_two_bit
 	UINT64 replace_count;	// If previous BTB entry was updated
 } BTB_two_bit[bpred_size];
 
-/* =====================================================================
- * 2-level adaptive scheme: HHRT/Pattern table + A2 automoton
- * ===================================================================== */
-using Bucket_t = std::pair<size_t, int>;
-using Buckets_t = std::vector<std::vector<Bucket_t>>;
-template<int LastK = 12, size_t TblSize = 512>
-struct HHRT
-{
-	int last_k;				// number of past outcomes to consider
-	size_t tbl_sz;				// # of HRTT entries
-	int bhist;				// History of k last 
-	Buckets_t buckets;
-
-	HHRT() : last_k(LastK), tbl_sz(TblSize), bhist(), buckets(Buckets_t(TblSize)) {}
-	void insert() {};
-	void find() {};
-	void hash() {};
-	// operator[]
-};
 
 /* initialize the BTB */
 VOID BTB_init()
@@ -125,9 +106,15 @@ VOID BTB_update(ADDRINT ins_ptr, bool taken)
     index = mask & ins_ptr;
 
     if(taken)
-    	BTB_two_bit[index].bhist++;
+    {
+	if(BTB_two_bit[index].bhist < 3)
+    		BTB_two_bit[index].bhist++;
+    }
     else
-    	BTB_two_bit[index].bhist--;
+    {
+	if(BTB_two_bit[index].bhist > 0)
+    		BTB_two_bit[index].bhist--;
+    }
 }
 
 /* insert a new branch in the table */

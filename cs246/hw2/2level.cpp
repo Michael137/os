@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include "pin.H"
 
+#include <bitset>
+#include <functional>
 
 using std::cerr;
 using std::string;
@@ -62,22 +64,147 @@ struct entry_two_bit
 /* =====================================================================
  * 2-level adaptive scheme: HHRT/Pattern table + A2 automoton
  * ===================================================================== */
-using Bucket_t = std::pair<size_t, int>;
-using Buckets_t = std::vector<std::vector<Bucket_t>>;
-template<int LastK = 12, size_t TblSize = 512>
-struct HHRT
-{
-	int last_k;				// number of past outcomes to consider
-	size_t tbl_sz;				// # of HRTT entries
-	int bhist;				// History of k last 
-	Buckets_t buckets;
+template<int LastK> using Bits_t = std::bitset<LastK>;
 
-	HHRT() : last_k(LastK), tbl_sz(TblSize), bhist(), buckets(Buckets_t(TblSize)) {}
-	void insert() {};
-	void find() {};
-	void hash() {};
-	// operator[]
+// History register
+template<int LastK>
+struct HR
+{
+	bool valid;
+	UINT64 tag;
+	std::bitset<LastK> bits;
+	int hist_len;			// Counts up to LastK
+	int collisions;
+
+	HR() : valid(false), tag(), bits(std::bitset<LastK>{}), hist_len(), collisions() {}
 };
+
+template<int LastK> using Bucket_t = HR<LastK>;
+template<int LastK> using Buckets_t = std::vector<Bucket_t<LastK>>;
+
+template<int LastK, size_t TblSize>
+class BitTable
+{
+protected:
+	Buckets_t<LastK> buckets;	// HR is an integer; collisions are handled by overwriting values
+public:
+	BitTable() : buckets(Buckets_t<LastK>{ TblSize }) {}
+
+	Bucket_t<LastK> history(size_t idx) { return buckets.bits[idx]; }
+
+	size_t hash_addr(size_t addr) { return std::hash<size_t>{}(addr); }
+
+//	Bucket_t<LastK> update(size_t addr, bool taken) = 0;
+};
+
+template<int LastK = 12, size_t TblSize = 512>
+class HHRT : public BitTable<LastK, TblSize>
+{
+public:
+	HHRT() : BitTable<LastK, TblSize>() {}
+
+	Bucket_t<LastK>& update(size_t addr, bool taken)
+	{
+		size_t hsh = this->hash_addr(addr);
+		size_t idx = hsh % this->buckets.size();
+		Bucket_t<LastK>& reg = this->buckets[idx];
+		reg.bits <<= 1;
+		reg.bits[0] = taken; // Most recent outcome at LSB
+		reg.tag = addr;
+
+		if(reg.valid)
+		{
+			reg.collisions++; // Not necessarily collision but acts as "replace_count"
+			CountReplaced++;
+		} else
+			reg.valid = true;
+
+		return reg;
+	}
+
+	bool exists(size_t addr)
+	{
+		size_t hsh = this->hash_addr(addr);
+		size_t idx = hsh % this->buckets.size();
+		return this->buckets[idx].valid;
+	}
+};
+
+// The branch behaviour for the last s occurrences of the unique
+// branch history of the last n branches
+//
+// Branch result sets HHRT register but also drives
+// the automaton that will set the pattern history bit
+// in this PT
+template<int LastK = 12 /*, typename Automaton */>
+struct PT: public BitTable<LastK, 200000>
+{
+public:
+	size_t hash_hr(Bucket_t<LastK> hr)
+	{
+		//return std::hash<Bucket_t<LastK>>{}(hr);
+		return std::hash<unsigned>{}(hr.bits.to_ulong()); // std::bitset hash only available in C++11
+	}
+
+	Bucket_t<LastK>& update(Bucket_t<LastK> reg, bool taken)
+	{
+		// Index
+		size_t hsh = hash_hr(reg);
+		size_t idx = hsh % this->buckets.size();
+		Bucket_t<LastK>& pattern_hist = this->buckets[idx];
+
+		//// Predict
+//		size_t prediction = A2(pattern_hist, taken);
+//		pattern_hist.hist_len = std::min(pattern_hist.hist_len + 1, LastK);
+//
+//		//// Update
+//		pattern_hist.bits <<= 1;
+//		pattern_hist.bits[0] = prediction;
+
+		// Pattern is saturating counter of LastK length
+		pattern_hist.hist_len = std::min(pattern_hist.hist_len + 1, LastK);
+		auto bit_val = pattern_hist.bits.to_ulong();
+		pattern_hist.bits = taken ?
+			((bit_val < 3) ? bit_val + 1ULL : bit_val) :
+			((bit_val > 0) ? bit_val - 1ULL : bit_val);
+
+		return pattern_hist;
+	}
+
+	bool predict(Bucket_t<LastK> const& reg)
+	{
+		return reg.bits.to_ulong() >= 2;
+	}
+
+	// Use pattern history bits to predict branch
+	bool A2_predict(int ctr)
+	{
+		return ctr >= 2;
+	}
+
+	// A2 automaton
+	size_t A2(Bucket_t<LastK> pattern, bool taken)
+	{
+		int saturating_ctr = 0;
+		//std::cout << pattern.hist_len << std::endl;
+		for(int i = 0; i < pattern.hist_len; ++i)
+		{
+			if(pattern.bits[i]) {
+				if(saturating_ctr < 3)
+					saturating_ctr++; }
+			else {
+				if(saturating_ctr > 0)
+					saturating_ctr--; }
+		}
+
+		saturating_ctr += taken ? 1 : -1;
+		//std::cout << saturating_ctr << std::endl;
+		return this->A2_predict(saturating_ctr);
+	}
+};
+
+PT<12> pt_g{};
+HHRT<12, 512> hhrt_g{};
 
 /* initialize the BTB */
 VOID BTB_init()
@@ -185,19 +312,25 @@ VOID PredictBranch(ADDRINT ins_ptr, INT32 taken)
     if (taken)
         CountTaken++;
 
-    if(BTB_lookup(ins_ptr))
-    {
-        if(BTB_prediction(ins_ptr) == taken)
-                CountCorrect++;
-        BTB_update(ins_ptr, taken);
-    }
-    else
-    {
-        if(!taken)
-                CountCorrect++;
-        else
-            BTB_insert(ins_ptr);
-    }
+//    if(BTB_lookup(ins_ptr))
+//    {
+//        if(BTB_prediction(ins_ptr) == taken)
+//                CountCorrect++;
+//        BTB_update(ins_ptr, taken);
+//    }
+//    else
+//    {
+//        if(!taken)
+//                CountCorrect++;
+//        else
+//            BTB_insert(ins_ptr);
+//    }
+
+    auto reg = hhrt_g.update(ins_ptr, taken);
+    auto pattern = pt_g.update(reg, taken);
+    bool p = pt_g.predict(pattern);
+    if(p == taken)
+	    CountCorrect++;
 
     if(CountSeen == KnobBranchLimit.Value())
     {

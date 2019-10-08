@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include "pin.H"
 
+#include <bitset>
+#include <functional>
 
 using std::cerr;
 using std::string;
@@ -59,6 +61,118 @@ struct entry_two_bit
 	UINT64 replace_count;	// If previous BTB entry was updated
 } BTB_two_bit[bpred_size];
 
+/* =====================================================================
+ * 2-level adaptive scheme: HHRT/Pattern table + A2 automoton
+ * ===================================================================== */
+template<int LastK> using Bits_t = std::bitset<LastK>;
+
+// History register
+template<int LastK>
+struct HR
+{
+	bool valid;
+	UINT64 tag;
+	Bits_t<LastK> bits;
+
+	HR() : valid(false), tag(), bits(Bits_t<LastK>{}) {}
+};
+
+template<int LastK> using Bucket_t = HR<LastK>;
+template<int LastK> using Buckets_t = std::vector<Bucket_t<LastK>>;
+
+template<int LastK>
+class HHRT
+{
+public:
+	Buckets_t<LastK> buckets;
+	HHRT(size_t sz) : buckets()
+	{
+		for(size_t i = 0; i < sz; ++i)
+			buckets.emplace_back();
+	}
+
+	Bucket_t<LastK> history(size_t idx) { return buckets.bits[idx]; }
+	size_t hash_addr(size_t addr) { return std::hash<size_t>{}(addr); }
+
+	Bucket_t<LastK> update(size_t addr, bool taken)
+	{
+		size_t hsh = this->hash_addr(addr);
+		size_t idx = hsh % buckets.size();
+		Bucket_t<LastK> reg = this->buckets[idx];
+		reg.bits <<= 1;
+		reg.bits[0] = taken; // Most recent outcome at LSB
+		reg.tag = addr;
+		reg.valid = true;
+
+		return reg;
+	}
+};
+
+// The branch behaviour for the last s occurrences of the unique
+// branch history of the last n branches
+//
+// Branch result sets HHRT register but also drives
+// the automaton that will set the pattern history bit
+// in this PT
+template<int LastK /*, typename Automaton */>
+struct PT
+{
+public:
+	Buckets_t<LastK> buckets;
+	PT(size_t sz) : buckets()
+	{
+		for(size_t i = 0; i < sz; ++i)
+			buckets.emplace_back();
+	}
+
+	size_t hash_hr(Bucket_t<LastK> hr)
+	{
+		//return std::hash<Bucket_t<LastK>>{}(hr);
+		return std::hash<int>{}(hr.bits.to_ulong()); // std::bitset hash only available in C++11
+	}
+
+	Bucket_t<LastK> update(Bucket_t<LastK> reg, bool taken)
+	{
+		// Index
+		size_t hsh = hash_hr(reg);
+		size_t idx = hsh % this->buckets.size();
+		Bucket_t<LastK> pattern_hist = this->buckets[idx];
+
+		// Predict
+		size_t prediction = A2(pattern_hist, taken);
+
+		// Update
+		pattern_hist.bits[0] = prediction;
+		this->buckets[idx] = pattern_hist;
+
+		return pattern_hist;
+	}
+
+	// Use pattern history bits to predict branch
+	bool A2_predict(int ctr)
+	{
+		return ctr >= 2;
+	}
+
+	// A2 automaton
+	size_t A2(Bucket_t<LastK> pattern, bool taken)
+	{
+		int saturating_ctr = 0;
+		for(size_t i = 0; i < pattern.bits.size(); ++i)
+		{
+			if(pattern.bits[i])
+				saturating_ctr++;
+			else
+				saturating_ctr--;
+		}
+
+		saturating_ctr += taken ? 1 : -1;
+		return this->A2_predict(saturating_ctr);
+	}
+};
+
+PT<12> pt_g(512);
+HHRT<12> hhrt_g(UINT_MAX);
 
 /* initialize the BTB */
 VOID BTB_init()
@@ -106,15 +220,9 @@ VOID BTB_update(ADDRINT ins_ptr, bool taken)
     index = mask & ins_ptr;
 
     if(taken)
-    {
-	if(BTB_two_bit[index].bhist < 3)
-    		BTB_two_bit[index].bhist++;
-    }
+    	BTB_two_bit[index].bhist++;
     else
-    {
-	if(BTB_two_bit[index].bhist > 0)
-    		BTB_two_bit[index].bhist--;
-    }
+    	BTB_two_bit[index].bhist--;
 }
 
 /* insert a new branch in the table */
@@ -172,19 +280,24 @@ VOID PredictBranch(ADDRINT ins_ptr, INT32 taken)
     if (taken)
         CountTaken++;
 
-    if(BTB_lookup(ins_ptr))
-    {
-        if(BTB_prediction(ins_ptr) == taken)
-                CountCorrect++;
-        BTB_update(ins_ptr, taken);
-    }
-    else
-    {
-        if(!taken)
-                CountCorrect++;
-        else
-            BTB_insert(ins_ptr);
-    }
+//    if(BTB_lookup(ins_ptr))
+//    {
+//        if(BTB_prediction(ins_ptr) == taken)
+//                CountCorrect++;
+//        BTB_update(ins_ptr, taken);
+//    }
+//    else
+//    {
+//        if(!taken)
+//                CountCorrect++;
+//        else
+//            BTB_insert(ins_ptr);
+//    }
+
+    auto reg = hhrt_g.update(ins_ptr, taken);
+    auto pattern = pt_g.update(reg, taken);
+    if(pattern.bits[0] == taken)
+	    CountCorrect++;
 
     if(CountSeen == KnobBranchLimit.Value())
     {
