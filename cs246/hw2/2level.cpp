@@ -24,6 +24,12 @@ KNOB<BOOL>   KnobPid(KNOB_MODE_WRITEONCE,                "pintool",
 KNOB<UINT64> KnobBranchLimit(KNOB_MODE_WRITEONCE,        "pintool",
                             "branch_limit", "0", "Nimit of branches analyzed");
 
+KNOB<UINT64> KnobHRLength(KNOB_MODE_WRITEONCE,        "pintool",
+                            "hr_len", "0", "Number of branch outcomes recorded in history register");
+KNOB<UINT64> KnobHHRTEntries(KNOB_MODE_WRITEONCE,        "pintool",
+                            "hhrt_sz", "0", "Size of HHRT table");
+KNOB<UINT64> KnobPTEntries(KNOB_MODE_WRITEONCE,        "pintool",
+                            "pt_sz", "0", "Size of PT table");
 
 
 /* ===================================================================== */
@@ -136,17 +142,19 @@ public:
 // Branch result sets HHRT register but also drives
 // the automaton that will set the pattern history bit
 // in this PT
-template<int LastK = 12 /*, typename Automaton */>
-struct PT: public BitTable<LastK, 200000>
+template<int LastK = 2, int TblSize = 65536 /*, typename Automaton */>
+struct PT: public BitTable<LastK, TblSize>
 {
 public:
-	size_t hash_hr(Bucket_t<LastK> hr)
+	PT() : BitTable<LastK, TblSize>() {}
+
+	template<typename BType> size_t hash_hr(BType hr)
 	{
 		//return std::hash<Bucket_t<LastK>>{}(hr);
 		return std::hash<unsigned>{}(hr.bits.to_ulong()); // std::bitset hash only available in C++11
 	}
 
-	Bucket_t<LastK>& update(Bucket_t<LastK> reg, bool taken)
+	template<typename BType> Bucket_t<LastK>& update(BType reg, bool taken)
 	{
 		// Index
 		size_t hsh = hash_hr(reg);
@@ -203,8 +211,8 @@ public:
 	}
 };
 
-PT<12> pt_g{};
-HHRT<12, 512> hhrt_g{};
+PT<2, 4096> pt_g{};	// 2-bit saturating counter; 4096 entries
+HHRT<12, 512> hhrt_g{};	// 512 entries recording history of 12 past outcomes
 
 /* initialize the BTB */
 VOID BTB_init()
@@ -327,7 +335,9 @@ VOID PredictBranch(ADDRINT ins_ptr, INT32 taken)
 //    }
 
     auto reg = hhrt_g.update(ins_ptr, taken);
+    //std::cout << reg.bits << std::endl;
     auto pattern = pt_g.update(reg, taken);
+//    std::cout << pattern.bits << std::endl;
     bool p = pt_g.predict(pattern);
     if(p == taken)
 	    CountCorrect++;
