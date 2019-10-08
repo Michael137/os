@@ -2,5 +2,5 @@
 
 EXE=$1
 
-./run-pin-local-1bit.bash ${EXE}
-./run-pin-local-2bit.bash ${EXE}
+./run-pin-1bit.bash ${EXE} $2 $3
+./run-pin-2bit.bash ${EXE} $2 $3
