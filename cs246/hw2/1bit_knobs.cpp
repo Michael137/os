@@ -25,6 +25,7 @@ KNOB<UINT64> KnobBranchLimit(KNOB_MODE_WRITEONCE,        "pintool",
 KNOB<UINT64> KnobBPredSize(KNOB_MODE_WRITEONCE,        "pintool",
                             "bpred_size", "0", "Size of 1bit/2bit prediction buffer size");
 
+
 /* ===================================================================== */
 /* Global Variables */
 /* ===================================================================== */
@@ -37,32 +38,31 @@ UINT64 g_mask = 0;
 std::ostream * out = &cerr;
 
 /* ===================================================================== */
-/* Automaton A2 Branch predictor                                         */
+/* Automaton Last-Time Branch predictor                                  */
 /* ===================================================================== */
-struct entry_two_bit
+struct entry_one_bit
 {
-	bool valid;		// Inserted in history table
-	int bhist;		// 2-bit prediction history
-	UINT64 tag;		// Index to find via hash (i.e. branch address)
-	UINT64 replace_count;	// If previous BTB entry was updated
+    bool valid;
+    bool prediction;
+    UINT64 tag;
+    UINT64 replace_count;
 };
-static std::vector<entry_two_bit> BTB_two_bit{};
+static std::vector<entry_one_bit> BTB_one_bit{};
 
 /* initialize the BTB */
 VOID BTB_init()
 {
     UINT64 buf_sz = KnobBPredSize.Value();
-    BTB_two_bit.resize(buf_sz);
-    UINT64 i;
+    BTB_one_bit.resize(buf_sz);
+    g_mask = (buf_sz - 1);
 
-    g_mask = buf_sz - 1;
+    UINT64 i;
 
     for(i = 0; i < buf_sz; i++)
     {
-        BTB_two_bit[i].valid = false;
-        BTB_two_bit[i].bhist = 0;
-        BTB_two_bit[i].tag = 0;
-        BTB_two_bit[i].replace_count = 0;
+        BTB_one_bit[i].valid = false;
+        BTB_one_bit[i].tag = 0;
+        BTB_one_bit[i].replace_count = 0;
     }
 }
 
@@ -73,8 +73,8 @@ bool BTB_lookup(ADDRINT ins_ptr)
 
     index = g_mask & ins_ptr;
 
-    if(BTB_two_bit[index].valid)
-        if(BTB_two_bit[index].tag == ins_ptr)
+    if(BTB_one_bit[index].valid)
+        if(BTB_one_bit[index].tag == ins_ptr)
             return true;
 
     return false;
@@ -87,7 +87,7 @@ bool BTB_prediction(ADDRINT ins_ptr)
 
     index = g_mask & ins_ptr;
 
-    return BTB_two_bit[index].bhist >= 2;
+    return BTB_one_bit[index].prediction;
 }
 
 /* update the BTB entry with the last result */
@@ -97,10 +97,7 @@ VOID BTB_update(ADDRINT ins_ptr, bool taken)
 
     index = g_mask & ins_ptr;
 
-    if(taken)
-    	BTB_two_bit[index].bhist++;
-    else
-    	BTB_two_bit[index].bhist--;
+    BTB_one_bit[index].prediction = taken;
 }
 
 /* insert a new branch in the table */
@@ -108,18 +105,17 @@ VOID BTB_insert(ADDRINT ins_ptr)
 {
     UINT64 index;
 
-    //index = mask & ins_ptr;
-    index = (BTB_two_bit.size() - 1) & ins_ptr;
+    index = g_mask & ins_ptr;
 
-    if(BTB_two_bit[index].valid)
+    if(BTB_one_bit[index].valid)
     {
-        BTB_two_bit[index].replace_count++;
+        BTB_one_bit[index].replace_count++;
         CountReplaced++;
     }
 
-    BTB_two_bit[index].valid = true;
-    BTB_two_bit[index].bhist++;
-    BTB_two_bit[index].tag = ins_ptr;
+    BTB_one_bit[index].valid = true;
+    BTB_one_bit[index].prediction = true;
+    BTB_one_bit[index].tag = ins_ptr;
 }
 
 /* ===================================================================== */

@@ -8,7 +8,7 @@ executable = run-pin.bash
 
 # command-line arguments to the script
 #arguments = hw2.so /usr/local/benchmarks/libquantum_O3
-#arguments = hw2.so /bin/ls
+arguments = /bin/ls
 
 # no standard input needed this time
 # input = measure.in
@@ -30,4 +30,3 @@ transfer_output_files = pin.log,tool.out
 
 # submit a job with the parameters given above
 queue
-

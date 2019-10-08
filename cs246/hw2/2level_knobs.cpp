@@ -23,7 +23,7 @@ KNOB<BOOL>   KnobPid(KNOB_MODE_WRITEONCE,                "pintool",
                             "pid", "0", "Append pid to output");
 
 KNOB<UINT64> KnobBranchLimit(KNOB_MODE_WRITEONCE,        "pintool",
-                            "branch_limit", "0", "Nimit of branches analyzed");
+                            "branch_limit", "0", "Limit of branches analyzed");
 
 KNOB<UINT64> KnobHRLength(KNOB_MODE_WRITEONCE,        "pintool",
                             "hr_len", "0", "Number of branch outcomes recorded in history register");
@@ -31,7 +31,6 @@ KNOB<UINT64> KnobHHRTEntries(KNOB_MODE_WRITEONCE,        "pintool",
                             "hhrt_sz", "0", "Size of HHRT table");
 KNOB<UINT64> KnobPTEntries(KNOB_MODE_WRITEONCE,        "pintool",
                             "pt_sz", "0", "Size of PT table");
-
 
 /* ===================================================================== */
 /* Global Variables */
@@ -42,31 +41,6 @@ UINT64 CountCorrect = 0;
 UINT64 CountReplaced = 0;
 
 std::ostream * out = &cerr;
-
-const int bpred_size = 1024;
-UINT64 mask = (bpred_size-1);
-
-/* ===================================================================== */
-/* Automaton Last-Time Branch predictor                                  */
-/* ===================================================================== */
-struct entry_one_bit
-{
-    bool valid;
-    bool prediction;
-    UINT64 tag;
-    UINT64 replace_count;
-} BTB_one_bit[bpred_size];
-
-/* ===================================================================== */
-/* Automaton A2 Branch predictor                                         */
-/* ===================================================================== */
-struct entry_two_bit
-{
-	bool valid;		// Inserted in history table
-	int bhist;		// 2-bit prediction history
-	UINT64 tag;		// Index to find via hash (i.e. branch address)
-	UINT64 replace_count;	// If previous BTB entry was updated
-} BTB_two_bit[bpred_size];
 
 /* =====================================================================
  * 2-level adaptive scheme: HHRT/Pattern table + A2 automoton
@@ -220,83 +194,14 @@ public:
 	}
 };
 
-static PT<2> pt_g;	// 2-bit saturating counter; 4096 entries
-static HHRT<12> hhrt_g; // 512 entries recording history of 12 past outcomes
-
-/* initialize the BTB */
-VOID BTB_init()
-{
-    int i;
-
-    for(i = 0; i < bpred_size; i++)
-    {
-        BTB_two_bit[i].valid = false;
-        BTB_two_bit[i].bhist = 0;
-        BTB_two_bit[i].tag = 0;
-        BTB_two_bit[i].replace_count = 0;
-    }
-}
+static PT<2> pt_g;	// 2-bit saturating counter
+static HHRT<12> hhrt_g; // history registers of 12 past outcomes
 
 VOID AdaptiveInit()
 {
 	//std::cout << KnobHHRTEntries.Value() << std::endl;
 	pt_g.init(KnobHHRTEntries.Value());
 	hhrt_g.init(KnobPTEntries.Value());
-}
-
-/* see if the given address is in the BTB */
-bool BTB_lookup(ADDRINT ins_ptr)
-{
-    UINT64 index;
-
-    index = mask & ins_ptr;
-
-    if(BTB_two_bit[index].valid)
-        if(BTB_two_bit[index].tag == ins_ptr)
-            return true;
-
-    return false;
-}
-
-/* return the prediction for the given address */
-bool BTB_prediction(ADDRINT ins_ptr)
-{
-    UINT64 index;
-
-    index = mask & ins_ptr;
-
-    return BTB_two_bit[index].bhist >= 2;
-}
-
-/* update the BTB entry with the last result */
-VOID BTB_update(ADDRINT ins_ptr, bool taken)
-{
-    UINT64 index;
-
-    index = mask & ins_ptr;
-
-    if(taken)
-    	BTB_two_bit[index].bhist++;
-    else
-    	BTB_two_bit[index].bhist--;
-}
-
-/* insert a new branch in the table */
-VOID BTB_insert(ADDRINT ins_ptr)
-{
-    UINT64 index;
-
-    index = mask & ins_ptr;
-
-    if(BTB_two_bit[index].valid)
-    {
-        BTB_two_bit[index].replace_count++;
-        CountReplaced++;
-    }
-
-    BTB_two_bit[index].valid = true;
-    BTB_two_bit[index].bhist++;
-    BTB_two_bit[index].tag = ins_ptr;
 }
 
 /* ===================================================================== */
@@ -317,7 +222,8 @@ VOID PrintResults(bool limit_reached)
     if(KnobPid.Value()) output_file += "." + getpid();
 
     //std::ofstream out(output_file.c_str());
-    if (!output_file.empty()) { out = new std::ofstream(output_file.c_str());}
+    if (!output_file.empty()) { out = new std::ofstream(output_file.c_str(), std::ios_base::app);} // append to file instead of overwrite
+    //if (!output_file.empty()) { out = new std::ofstream(output_file.c_str());}
 
     if(limit_reached)
         *out << "Reason: limit reached\n";
@@ -336,24 +242,8 @@ VOID PredictBranch(ADDRINT ins_ptr, INT32 taken)
     if (taken)
         CountTaken++;
 
-//    if(BTB_lookup(ins_ptr))
-//    {
-//        if(BTB_prediction(ins_ptr) == taken)
-//                CountCorrect++;
-//        BTB_update(ins_ptr, taken);
-//    }
-//    else
-//    {
-//        if(!taken)
-//                CountCorrect++;
-//        else
-//            BTB_insert(ins_ptr);
-//    }
-
     auto reg = hhrt_g.update(ins_ptr, taken);
-    //std::cout << reg.bits << std::endl;
     auto pattern = pt_g.update(reg, taken);
-//    std::cout << pattern.bits << std::endl;
     bool p = pt_g.predict(pattern);
     if(p == taken)
 	    CountCorrect++;
@@ -423,7 +313,6 @@ int main(int argc, char *argv[])
         return Usage();
     }
 
-    BTB_init();
     AdaptiveInit();
 
     INS_AddInstrumentFunction(Instruction, 0);

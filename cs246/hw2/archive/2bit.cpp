@@ -22,8 +22,7 @@ KNOB<BOOL>   KnobPid(KNOB_MODE_WRITEONCE,                "pintool",
 KNOB<UINT64> KnobBranchLimit(KNOB_MODE_WRITEONCE,        "pintool",
                             "branch_limit", "0", "Nimit of branches analyzed");
 
-KNOB<UINT64> KnobBPredSize(KNOB_MODE_WRITEONCE,        "pintool",
-                            "bpred_size", "0", "Size of 1bit/2bit prediction buffer size");
+
 
 /* ===================================================================== */
 /* Global Variables */
@@ -33,8 +32,21 @@ UINT64 CountTaken = 0;
 UINT64 CountCorrect = 0;
 UINT64 CountReplaced = 0;
 
-UINT64 g_mask = 0;
 std::ostream * out = &cerr;
+
+const int bpred_size = 1024;
+UINT64 mask = (bpred_size-1);
+
+/* ===================================================================== */
+/* Automaton Last-Time Branch predictor                                  */
+/* ===================================================================== */
+struct entry_one_bit
+{
+    bool valid;
+    bool prediction;
+    UINT64 tag;
+    UINT64 replace_count;
+} BTB_one_bit[bpred_size];
 
 /* ===================================================================== */
 /* Automaton A2 Branch predictor                                         */
@@ -45,19 +57,15 @@ struct entry_two_bit
 	int bhist;		// 2-bit prediction history
 	UINT64 tag;		// Index to find via hash (i.e. branch address)
 	UINT64 replace_count;	// If previous BTB entry was updated
-};
-static std::vector<entry_two_bit> BTB_two_bit{};
+} BTB_two_bit[bpred_size];
+
 
 /* initialize the BTB */
 VOID BTB_init()
 {
-    UINT64 buf_sz = KnobBPredSize.Value();
-    BTB_two_bit.resize(buf_sz);
-    UINT64 i;
+    int i;
 
-    g_mask = buf_sz - 1;
-
-    for(i = 0; i < buf_sz; i++)
+    for(i = 0; i < bpred_size; i++)
     {
         BTB_two_bit[i].valid = false;
         BTB_two_bit[i].bhist = 0;
@@ -71,7 +79,7 @@ bool BTB_lookup(ADDRINT ins_ptr)
 {
     UINT64 index;
 
-    index = g_mask & ins_ptr;
+    index = mask & ins_ptr;
 
     if(BTB_two_bit[index].valid)
         if(BTB_two_bit[index].tag == ins_ptr)
@@ -85,7 +93,7 @@ bool BTB_prediction(ADDRINT ins_ptr)
 {
     UINT64 index;
 
-    index = g_mask & ins_ptr;
+    index = mask & ins_ptr;
 
     return BTB_two_bit[index].bhist >= 2;
 }
@@ -95,12 +103,18 @@ VOID BTB_update(ADDRINT ins_ptr, bool taken)
 {
     UINT64 index;
 
-    index = g_mask & ins_ptr;
+    index = mask & ins_ptr;
 
     if(taken)
-    	BTB_two_bit[index].bhist++;
+    {
+	if(BTB_two_bit[index].bhist < 3)
+    		BTB_two_bit[index].bhist++;
+    }
     else
-    	BTB_two_bit[index].bhist--;
+    {
+	if(BTB_two_bit[index].bhist > 0)
+    		BTB_two_bit[index].bhist--;
+    }
 }
 
 /* insert a new branch in the table */
@@ -108,8 +122,7 @@ VOID BTB_insert(ADDRINT ins_ptr)
 {
     UINT64 index;
 
-    //index = mask & ins_ptr;
-    index = (BTB_two_bit.size() - 1) & ins_ptr;
+    index = mask & ins_ptr;
 
     if(BTB_two_bit[index].valid)
     {
@@ -140,7 +153,7 @@ VOID PrintResults(bool limit_reached)
     if(KnobPid.Value()) output_file += "." + getpid();
 
     //std::ofstream out(output_file.c_str());
-    if (!output_file.empty()) { out = new std::ofstream(output_file.c_str(), std::ios_base::app);}
+    if (!output_file.empty()) { out = new std::ofstream(output_file.c_str());}
 
     if(limit_reached)
         *out << "Reason: limit reached\n";
