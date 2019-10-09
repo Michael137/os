@@ -4,11 +4,11 @@
 #
 ####################
 # script that runs the experiment
-executable = sweep-buf.bash
+executable = sweep.bash
 
 # command-line arguments to the script
-arguments = /usr/local/benchmarks/libquantum_O3 400 25
-#arguments = /usr/local/benchmarks/dealII_O3 10
+# arguments = /usr/local/benchmarks/libquantum_O3 400 25
+# arguments = /usr/local/benchmarks/dealII_O3 10
 # arguments = /bin/ls
 
 # no standard input needed this time
@@ -22,12 +22,12 @@ error = measure.err
 log = measure.log
 
 # need exclusive use of execution host with 96 logical processors OR exclude for pin runs
-# request_cpus = 1
+request_cpus = 1
 
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
-transfer_input_files = obj-intel64/1bit_knobs.cpp.so,obj-intel64/2bit_knobs.cpp.so,pin.log,tool_1bit.out,tool_2bit.out,run-pin-1bit.bash,run-pin-2bit.bash
-transfer_output_files = pin.log,tool_1bit.out,tool_2bit.out
+transfer_input_files = ../obj-intel64/knobs.cpp.so,pin.log,tool_1bit.out,tool_2bit.out,tool_adaptive.out,run-1bit.bash,run-2bit.bash
+transfer_output_files = pin.log,tool_1bit.out,tool_2bit.out,tool_adaptive.out
 
 # submit a job with the parameters given above
 queue

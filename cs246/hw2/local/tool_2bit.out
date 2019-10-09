@@ -1,0 +1,78 @@
+### 16 ###
+Reason: fini
+Count Seen: 161251
+Count Taken: 84974
+Count Correct: 101503
+Count Replaced: 50399
+### 32 ###
+Reason: fini
+Count Seen: 161251
+Count Taken: 84974
+Count Correct: 110947
+Count Replaced: 40064
+### 64 ###
+Reason: fini
+Count Seen: 161251
+Count Taken: 84974
+Count Correct: 119848
+Count Replaced: 30293
+### 128 ###
+Reason: fini
+Count Seen: 161243
+Count Taken: 84861
+Count Correct: 129894
+Count Replaced: 19958
+### 256 ###
+Reason: fini
+Count Seen: 161243
+Count Taken: 84861
+Count Correct: 136147
+Count Replaced: 12979
+### 512 ###
+Reason: fini
+Count Seen: 161251
+Count Taken: 84974
+Count Correct: 140198
+Count Replaced: 9188
+### 1024 ###
+Reason: fini
+Count Seen: 161192
+Count Taken: 84793
+Count Correct: 143321
+Count Replaced: 5794
+### 2048 ###
+Reason: fini
+Count Seen: 161194
+Count Taken: 84808
+Count Correct: 146056
+Count Replaced: 2657
+### 4096 ###
+Reason: fini
+Count Seen: 161243
+Count Taken: 84861
+Count Correct: 146975
+Count Replaced: 1250
+### 8192 ###
+Reason: fini
+Count Seen: 161192
+Count Taken: 84793
+Count Correct: 147325
+Count Replaced: 643
+### 16384 ###
+Reason: fini
+Count Seen: 161192
+Count Taken: 84793
+Count Correct: 147502
+Count Replaced: 296
+### 32768 ###
+Reason: fini
+Count Seen: 161243
+Count Taken: 84861
+Count Correct: 147520
+Count Replaced: 103
+### 65536 ###
+Reason: fini
+Count Seen: 161184
+Count Taken: 84793
+Count Correct: 147593
+Count Replaced: 58

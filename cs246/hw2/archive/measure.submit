@@ -4,23 +4,23 @@
 #
 ####################
 # script that runs the experiment
-executable = test.bash
+executable = run-perf.bash
 
 # command-line arguments to the script
-# arguments = mem_inst_retired.all_loads,mem_inst_retired.all_stores,br_inst_retired.all_branches,instructions /bin/ls
+arguments = mem_inst_retired.all_loads,mem_inst_retired.all_stores,br_inst_retired.all_branches,instructions /bin/ls
 
 # no standard input needed this time
 # input = measure.in
 
 # files in which to save standard output and standard error
-output = measure_test.out
-error = measure_test.err
+output = measure.out
+error = measure.err
 
 # file for condor’s statistics about the job’s execution
-log = measure_test.log
+log = measure.log
 
 # need exclusive use of execution host with 96 logical processors
-# request_cpus = 96
+request_cpus = 96
 
 # submit a job with the parameters given above
 queue

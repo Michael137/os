@@ -1,9 +1,8 @@
 #!/bin/bash -e
 
-BUF_SZ=`seq 4 16`
-declare EXE=$1
-declare TOOL=2bit_knobs.cpp.so
-declare OUT_FILE="tool_2bit.out"
+BUF_SZ=`seq 7 13`
+declare OUT_FILE=$1
+declare EXE=$2
 
 export PIN_ROOT=/opt/intel/pin
 export PATH=$PIN_ROOT:$PATH
@@ -13,5 +12,5 @@ do
 	ENTRIES=$((2 ** ${j}))
 	echo "Writing to ${OUT_FILE}..."
 	printf "### ${ENTRIES} ###\n" >> ${OUT_FILE}
-	pin -t "$TOOL" -outfile $OUT_FILE -bpred_size $ENTRIES -- "$EXE" $2 $3
+	pin -t "knobs.cpp.so" -outfile $OUT_FILE -bpred_size $ENTRIES -predictor 1 -- "$EXE" $3 $4
 done

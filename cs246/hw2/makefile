@@ -1,16 +1,19 @@
-ifeq "$(PREDICTOR)" ""
-	PREDICTOR=2level_knobs.cpp
-endif
+PREDICTORS=2level_knobs.cpp.so 2bit_knobs.cpp.so 1bit_knobs.cpp.so knobs.cpp.so
 
 ifeq "$(CONDOR)" ""
 	CONDOR=buf
 endif
 
-all:
-	cp $(PREDICTOR) hw2.cpp
+install:
+	mv *.cpp.so obj-intel64/
+
+%.cpp.so: %.cpp
+	cp $< hw2.cpp
 	$(MAKE) -f build.mk clean
 	$(MAKE) -f build.mk obj-intel64/hw2.so
-	mv obj-intel64/hw2.so obj-intel64/"$(PREDICTOR).so"
+	mv obj-intel64/hw2.so $@
+
+all: $(PREDICTORS) install
 
 condor:
 	rm -f pin.log

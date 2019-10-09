@@ -97,9 +97,9 @@ VOID BTB_update(ADDRINT ins_ptr, bool taken)
 
     index = g_mask & ins_ptr;
 
-    if(taken)
+    if(taken && BTB_two_bit[index].bhist < 3)
     	BTB_two_bit[index].bhist++;
-    else
+    else if(!taken && BTB_two_bit[index].bhist > 0)
     	BTB_two_bit[index].bhist--;
 }
 
@@ -118,7 +118,7 @@ VOID BTB_insert(ADDRINT ins_ptr)
     }
 
     BTB_two_bit[index].valid = true;
-    BTB_two_bit[index].bhist++;
+    BTB_two_bit[index].bhist = 1;
     BTB_two_bit[index].tag = ins_ptr;
 }
 
