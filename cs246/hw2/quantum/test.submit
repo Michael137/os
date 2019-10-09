@@ -4,7 +4,7 @@
 #
 ####################
 # script that runs the experiment
-executable = sweep.bash
+executable = test.bash
 
 # command-line arguments to the script
 # arguments = /usr/local/benchmarks/libquantum_O3 400 25
@@ -15,19 +15,19 @@ executable = sweep.bash
 # input = measure.in
 
 # files in which to save standard output and standard error
-output = measure.out
-error = measure.err
+output = measure_test.out
+error = measure_test.err
 
 # file for condor’s statistics about the job’s execution
-log = measure.log
+log = measure_test.log
 
 # need exclusive use of execution host with 96 logical processors OR exclude for pin runs
-request_cpus = 1
+# request_cpus = 1
 
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
-transfer_input_files = ../obj-intel64/knobs.cpp.so,pin.log,tool_1bit.out,tool_2bit.out,tool_adaptive.out,run-1bit.bash,run-2bit.bash
-transfer_output_files = pin.log,tool_1bit.out,tool_2bit.out,tool_adaptive.out
+transfer_input_files = ../obj-intel64/knobs.cpp.so,run-1bit.bash,run-2bit.bash,run-adaptive.bash,test1bit.out,test2bit.out,testadaptive.out
+transfer_output_files = test1bit.out,test2bit.out,testadaptive.out
 
 # submit a job with the parameters given above
 queue

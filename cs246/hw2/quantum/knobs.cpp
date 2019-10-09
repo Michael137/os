@@ -242,6 +242,13 @@ public:
 	Bucket_t<LastK> history(size_t idx) { return buckets[idx]; }
 
 	size_t hash_addr(size_t addr) { return std::hash<size_t>{}(addr); }
+
+	// Hash table entry (which in our case is a set of bits)
+	template<typename BType> size_t hash_reg(BType hr)
+	{
+		//return std::hash<Bucket_t<LastK>>{}(hr);
+		return std::hash<unsigned>{}(hr.to_ulong()); // std::bitset hash only available in C++11
+	}
 };
 
 // Hash History Register Table
@@ -293,8 +300,9 @@ public:
 
 	template<typename BType> Bucket_t<LastK>& get(BType const& reg)
 	{
-		// Index using content of HR reg
-		size_t idx = reg.to_ulong() % this->buckets.size();
+		// Index
+		size_t hsh = this->hash_reg(reg);
+		size_t idx = hsh % this->buckets.size();
 		Bucket_t<LastK>& pattern_hist = this->buckets[idx];
 
 		return pattern_hist;

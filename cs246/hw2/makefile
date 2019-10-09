@@ -1,4 +1,4 @@
-PREDICTORS=2level_knobs.cpp.so 2bit_knobs.cpp.so 1bit_knobs.cpp.so knobs.cpp.so
+PREDICTORS=knobs.cpp.so
 
 ifeq "$(CONDOR)" ""
 	CONDOR=buf

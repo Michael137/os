@@ -1,0 +1,14 @@
+### 512 128 ###
+Reason: fini
+Count Seen: 1870278183
+Count Taken: 1509404234
+Count Correct: 1809879986
+Count Replaced: 0
+Percentage: 0.967706
+### 512 256 ###
+Reason: fini
+Count Seen: 26493634
+Count Taken: 23587555
+Count Correct: 26247313
+Count Replaced: 0
+Percentage: 0.990703

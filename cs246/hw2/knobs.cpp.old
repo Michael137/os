@@ -25,15 +25,16 @@ KNOB<BOOL>   KnobPid(KNOB_MODE_WRITEONCE,                "pintool",
 KNOB<UINT64> KnobBranchLimit(KNOB_MODE_WRITEONCE,        "pintool",
                             "branch_limit", "0", "Limit of branches analyzed");
 
-// For sweeping 1-bit, 2-bit and adaptive predictors
 KNOB<UINT64> KnobHRLength(KNOB_MODE_WRITEONCE,        "pintool",
                             "hr_len", "0", "Number of branch outcomes recorded in history register");
 KNOB<UINT64> KnobHHRTEntries(KNOB_MODE_WRITEONCE,        "pintool",
                             "hhrt_sz", "0", "Size of HHRT table");
 KNOB<UINT64> KnobPTEntries(KNOB_MODE_WRITEONCE,        "pintool",
                             "pt_sz", "0", "Size of PT table");
+
 KNOB<UINT64> KnobBPredSize(KNOB_MODE_WRITEONCE,        "pintool",
                             "bpred_size", "0", "Size of 1bit/2bit prediction buffer size");
+
 KNOB<UINT64> KnobPredictorType(KNOB_MODE_WRITEONCE,        "pintool",
                             "predictor", "0", "Choose 1-bit, 2-bit or 2-level adaptive branch predictor");
 
@@ -45,7 +46,7 @@ UINT64 CountTaken = 0;
 UINT64 CountCorrect = 0;
 UINT64 CountReplaced = 0;
 
-UINT64 g_mask = 0;		// Used for 1-bit/2-bit BTB indexing
+UINT64 g_mask = 0;
 UINT64 g_predictor_type = 0;
 std::ostream * out = &cerr;
 
@@ -131,7 +132,7 @@ VOID BTB_1bit_insert(ADDRINT ins_ptr)
 }
 
 /* ===================================================================== */
-/* 2-bit Branch predictor (based on A2 automaton)			 */
+/* Automaton A2 Branch predictor                                         */
 /* ===================================================================== */
 struct entry_two_bit
 {
@@ -202,7 +203,8 @@ VOID BTB_2bit_insert(ADDRINT ins_ptr)
 {
     UINT64 index;
 
-    index = g_mask & ins_ptr;
+    //index = mask & ins_ptr;
+    index = (BTB_two_bit.size() - 1) & ins_ptr;
 
     if(BTB_two_bit[index].valid)
     {
@@ -218,11 +220,22 @@ VOID BTB_2bit_insert(ADDRINT ins_ptr)
 /* =====================================================================
  * 2-level adaptive scheme: HHRT/Pattern table + A2 automoton
  * ===================================================================== */
-
-// LastK: indicates the length of the branch history we store
-// 	  in the history table
 template<int LastK> using Bits_t = std::bitset<LastK>;
-template<int LastK> using Bucket_t = Bits_t<LastK>; // Our history register only store a set of bits
+
+// History register
+template<int LastK>
+struct HR
+{
+	bool valid;
+	UINT64 tag;
+	std::bitset<LastK> bits;
+	int hist_len;			// Counts up to LastK
+	int collisions;
+
+	HR() : valid(false), tag(), bits(std::bitset<LastK>{}), hist_len(), collisions() {}
+};
+
+template<int LastK> using Bucket_t = HR<LastK>;
 template<int LastK> using Buckets_t = std::vector<Bucket_t<LastK>>;
 
 template<int LastK>
@@ -239,13 +252,13 @@ public:
 		buckets.resize(tbl_size);
 	}
 
-	Bucket_t<LastK> history(size_t idx) { return buckets[idx]; }
+	Bucket_t<LastK> history(size_t idx) { return buckets.bits[idx]; }
 
 	size_t hash_addr(size_t addr) { return std::hash<size_t>{}(addr); }
+
+//	Bucket_t<LastK> update(size_t addr, bool taken) = 0;
 };
 
-// Hash History Register Table
-// LastK indicates the length of each register (in bits)
 template<int LastK = 12>
 class HHRT : public BitTable<LastK>
 {
@@ -253,7 +266,6 @@ public:
 	explicit HHRT(size_t num_entries) : BitTable<LastK>(num_entries) {}
 	HHRT() : BitTable<LastK>(0) {}
 
-	// Retreive hash register given branch address
 	Bucket_t<LastK>& get(size_t addr, bool taken)
 	{
 		size_t hsh = this->hash_addr(addr);
@@ -264,11 +276,12 @@ public:
 	}
 };
 
-// Pattern History Table
-// Each entry is a 2-bit saturating counter in our
-// implementation. Alternatively LastK can be used
-// to increase the width of entries. The A2 automaton
-// is used to driven branch prediction
+// The branch behaviour for the last s occurrences of the unique
+// branch history of the last n branches
+//
+// Branch result sets HHRT register but also drives
+// the automaton that will set the pattern history bit
+// in this PT
 template<int LastK = 2 /*, typename Automaton */>
 struct PT: public BitTable<LastK>
 {
@@ -276,48 +289,51 @@ public:
 	explicit PT(size_t num_entries) : BitTable<LastK>(num_entries) {}
 	PT() : BitTable<LastK>(0) {}
 
-	// Returns updated PT entry
-	// Given an HHRT will retreive the corresponding PT entry and update
-	// the saturating counter based on the outcome of the branch (*taken*)
-	template<typename BType> void update(BType const& reg, bool taken)
+	template<typename BType> size_t hash_hr(BType hr)
 	{
-		// Index into PT
-		Bucket_t<LastK>& pattern_hist = get(reg);
-
-		// Update counter
-		auto bit_val = pattern_hist.to_ulong();
-		pattern_hist = taken ?
-			((bit_val < 3) ? bit_val + 1ULL : bit_val) :
-			((bit_val > 0) ? bit_val - 1ULL : bit_val);
+		//return std::hash<Bucket_t<LastK>>{}(hr);
+		return std::hash<unsigned>{}(hr.bits.to_ulong()); // std::bitset hash only available in C++11
 	}
 
-	template<typename BType> Bucket_t<LastK>& get(BType const& reg)
+	template<typename BType> Bucket_t<LastK>& update(BType reg, bool taken)
 	{
-		// Index using content of HR reg
-		size_t idx = reg.to_ulong() % this->buckets.size();
+		// Index
+		size_t hsh = hash_hr(reg);
+		size_t idx = hsh % this->buckets.size();
+		Bucket_t<LastK>& pattern_hist = this->buckets[idx];
+
+		// Pattern is saturating counter of LastK length
+		pattern_hist.hist_len = std::min(pattern_hist.hist_len + 1, LastK);
+		auto bit_val = pattern_hist.bits.to_ulong();
+		pattern_hist.bits = taken ?
+			((bit_val < 3) ? bit_val + 1ULL : bit_val) :
+			((bit_val > 0) ? bit_val - 1ULL : bit_val);
+
+		return pattern_hist;
+	}
+
+	template<typename BType> Bucket_t<LastK>& get(BType reg)
+	{
+		// Index
+		size_t hsh = hash_hr(reg);
+		size_t idx = hsh % this->buckets.size();
 		Bucket_t<LastK>& pattern_hist = this->buckets[idx];
 
 		return pattern_hist;
 	}
 
-	// A2 prediction
 	bool predict(Bucket_t<LastK> const& reg)
 	{
-		return reg.to_ulong() >= 2;
+		return reg.bits.to_ulong() >= 2;
 	}
 };
 
-/* =================================
- * Create HHRT and PT
- * HHRT's entries are 12-bit wide
- * PT's entries are 2-bit counters
- * ================================= */
 static PT<2> pt_g;	// 2-bit saturating counter
 static HHRT<12> hhrt_g; // history registers of 12 past outcomes
 
 VOID AdaptiveInit()
 {
-	// For sweeping PT and HHRT table sizes
+	//std::cout << KnobHHRTEntries.Value() << std::endl;
 	pt_g.init(KnobHHRTEntries.Value());
 	hhrt_g.init(KnobPTEntries.Value());
 }
@@ -339,7 +355,9 @@ VOID PrintResults(bool limit_reached)
     string output_file = KnobOutputFile.Value();
     if(KnobPid.Value()) output_file += "." + getpid();
 
-    out = new std::ofstream(output_file.c_str(), std::ios_base::app);
+    //std::ofstream out(output_file.c_str());
+    if (!output_file.empty()) { out = new std::ofstream(output_file.c_str(), std::ios_base::app);} // append to file instead of overwrite
+    //if (!output_file.empty()) { out = new std::ofstream(output_file.c_str());}
 
     if(limit_reached)
         *out << "Reason: limit reached\n";
@@ -388,23 +406,13 @@ VOID predict_2bit(ADDRINT ins_ptr, INT32 taken)
 
 VOID predict_adaptive(ADDRINT ins_ptr, INT32 taken)
 {
-	// Given history register...
 	auto& reg = hhrt_g.get(ins_ptr, taken);
-
-	// get the pattern...
 	auto& pat = pt_g.get(reg);
-
-	// and predict the next branch...
 	if(pt_g.predict(pat) == taken)
 	        CountCorrect++;
-
-	// then update the pattern table with the actual outcome...
 	pt_g.update(reg, taken);
-
-	// and finally update the history register
-	// (shift left and insert the new outcome)
-	reg <<= 1;
-	reg[0] = taken; // Most recent outcome at LSB
+	reg.bits <<= 1;
+	reg.bits[0] = taken; // Most recent outcome at LSB
 }
 
 /* ===================================================================== */

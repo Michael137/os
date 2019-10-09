@@ -3,17 +3,17 @@
 export PIN_ROOT=/opt/intel/pin
 export PATH=$PIN_ROOT:$PATH
 
-for i in `seq 1 2`
+for i in `seq 1 3`
 do
-	printf ">>> ${i}" >> "tool_1bit.out"
+	#printf ">>> ${i}" >> "tool_1bit.out"
 	# sweep 1bit and store in file
-	./run-1bit.bash "tool_1bit.out" "/usr/local/benchmarks/libquantum_O3" 400 25
+	./run-1bit.bash 7 13 "out/tool_1bit.out_{i}" "/usr/local/benchmarks/libquantum_O3" 100 25
 
-	printf ">>> ${i}" >> "tool_2bit.out"
+	#printf ">>> ${i}" >> "tool_2bit.out"
 	# sweep 2bit and store in file
-	./run-2bit.bash "tool_2bit.out" "/usr/local/benchmarks/libquantum_O3" 400 25
+	./run-2bit.bash 7 13 "out/tool_2bit.out_{i}" "/usr/local/benchmarks/libquantum_O3" 100 25
 
-	printf ">>> ${i}" >> "tool_adaptive.out"
+	#printf ">>> ${i}" >> "tool_adaptive.out"
 	# sweep adaptive and store in file
-	./run-adaptive.bash "tool_adaptive.out" "/usr/local/benchmarks/libquantum_O3" 400 25
+	./run-adaptive.bash 7 13 "out/tool_adaptive.out_{i}" "/usr/local/benchmarks/libquantum_O3" 100 25
 done
