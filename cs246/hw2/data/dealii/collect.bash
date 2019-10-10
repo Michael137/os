@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 
 PRED=$1
 OUT="${PRED}_merged.csv"
