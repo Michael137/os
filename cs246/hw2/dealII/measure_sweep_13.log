@@ -1,0 +1,42 @@
+000 (1522.000.000) 10/09 21:27:54 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=836_0143_4>
+...
+000 (1523.000.000) 10/09 21:27:54 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=836_0143_4>
+...
+000 (1524.000.000) 10/09 21:27:54 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=836_0143_4>
+...
+007 (1522.000.000) 10/09 21:28:38 Shadow exception!
+	Error from slot1_7@cs246-metal.seas.harvard.edu: SHADOW at 172.31.60.18 failed to send file(s) to <172.31.57.97:46535>: error reading from /home/mbuch/hw2/dealII/out: (errno 2) No such file or directory; STARTER failed to receive file(s) from <172.31.60.18:9618>
+	0  -  Run Bytes Sent By Job
+	2449595  -  Run Bytes Received By Job
+...
+012 (1522.000.000) 10/09 21:28:38 Job was held.
+	Error from slot1_7@cs246-metal.seas.harvard.edu: SHADOW at 172.31.60.18 failed to send file(s) to <172.31.57.97:46535>: error reading from /home/mbuch/hw2/dealII/out: (errno 2) No such file or directory; STARTER failed to receive file(s) from <172.31.60.18:9618>
+	Code 13 Subcode 2
+...
+007 (1523.000.000) 10/09 21:28:38 Shadow exception!
+	Error from slot1_4@cs246-metal.seas.harvard.edu: SHADOW at 172.31.60.18 failed to send file(s) to <172.31.57.97:34457>: error reading from /home/mbuch/hw2/dealII/out: (errno 2) No such file or directory; STARTER failed to receive file(s) from <172.31.60.18:9618>
+	0  -  Run Bytes Sent By Job
+	2449595  -  Run Bytes Received By Job
+...
+012 (1523.000.000) 10/09 21:28:39 Job was held.
+	Error from slot1_4@cs246-metal.seas.harvard.edu: SHADOW at 172.31.60.18 failed to send file(s) to <172.31.57.97:34457>: error reading from /home/mbuch/hw2/dealII/out: (errno 2) No such file or directory; STARTER failed to receive file(s) from <172.31.60.18:9618>
+	Code 13 Subcode 2
+...
+007 (1524.000.000) 10/09 21:28:39 Shadow exception!
+	Error from slot1_7@cs246-metal.seas.harvard.edu: SHADOW at 172.31.60.18 failed to send file(s) to <172.31.57.97:45943>: error reading from /home/mbuch/hw2/dealII/out: (errno 2) No such file or directory; STARTER failed to receive file(s) from <172.31.60.18:9618>
+	0  -  Run Bytes Sent By Job
+	2449704  -  Run Bytes Received By Job
+...
+012 (1524.000.000) 10/09 21:28:39 Job was held.
+	Error from slot1_7@cs246-metal.seas.harvard.edu: SHADOW at 172.31.60.18 failed to send file(s) to <172.31.57.97:45943>: error reading from /home/mbuch/hw2/dealII/out: (errno 2) No such file or directory; STARTER failed to receive file(s) from <172.31.60.18:9618>
+	Code 13 Subcode 2
+...
+009 (1522.000.000) 10/09 21:51:44 Job was aborted by the user.
+	via condor_rm (by user condor)
+...
+009 (1523.000.000) 10/09 21:51:44 Job was aborted by the user.
+	via condor_rm (by user condor)
+...
+009 (1524.000.000) 10/09 21:51:44 Job was aborted by the user.
+	via condor_rm (by user condor)
+...

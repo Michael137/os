@@ -1,19 +1,27 @@
 #!/bin/bash -e
 
-export PIN_ROOT=/opt/intel/pin
-export PATH=$PIN_ROOT:$PATH
+# Adaptive file names: <name>.PTSIZE_HHRTSIZE
 
-for i in `seq 1 3`
+for i in `seq 7 13`
 do
-	#printf ">>> ${i}" >> "tool_1bit.out"
-	# sweep 1bit and store in file
-	./run-1bit.bash 7 13 "out/tool_1bit.out_{i}" "/usr/local/benchmarks/libquantum_O3" 100 25
+	sed "s|PLACEHOLDER|${i}|g" sweep.condor.template > "sweep.submit.1bit.${i}"
+	sed -i "s|SCRIPT|run-1bit|g" "sweep.submit.1bit.${i}"
+	sed -i "s|ARGUMENTS|${i} out/tool_1bit_${i}.out /usr/local/benchmarks/libquantum_O3 400 25|g" "sweep.submit.1bit.${i}"
 
-	#printf ">>> ${i}" >> "tool_2bit.out"
-	# sweep 2bit and store in file
-	./run-2bit.bash 7 13 "out/tool_2bit.out_{i}" "/usr/local/benchmarks/libquantum_O3" 100 25
+	condor_submit "sweep.submit.1bit.${i}"
+	
+	sed "s|PLACEHOLDER|${i}|g" sweep.condor.template > "sweep.submit.2bit.${i}"
+	sed -i "s|SCRIPT|run-2bit|g" "sweep.submit.2bit.${i}"
+	sed -i "s|ARGUMENTS|${i} out/tool_2bit_${i}.out /usr/local/benchmarks/libquantum_O3 400 25|g" "sweep.submit.2bit.${i}"
 
-	#printf ">>> ${i}" >> "tool_adaptive.out"
-	# sweep adaptive and store in file
-	./run-adaptive.bash 7 13 "out/tool_adaptive.out_{i}" "/usr/local/benchmarks/libquantum_O3" 100 25
+	condor_submit "sweep.submit.2bit.${i}"
+
+	for j in `seq 7 13`
+	do
+		sed "s|PLACEHOLDER|${i}_${j}|g" sweep.condor.adaptive.template > "sweep.submit.adaptive.${i}_${j}"
+		sed -i "s|SCRIPT|run-adaptive|g" "sweep.submit.adaptive.${i}_${j}"
+		sed -i "s|ARGUMENTS|${i} $j out/tool_adaptive_${i}_${j}.out /usr/local/benchmarks/libquantum_O3 400 25|g" "sweep.submit.adaptive.${i}_${j}"
+
+		condor_submit "sweep.submit.adaptive.${i}_${j}"
+	done
 done

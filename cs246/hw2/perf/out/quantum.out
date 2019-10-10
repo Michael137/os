@@ -1,0 +1,54 @@
+>>> 1
+
+ Performance counter stats for '/usr/local/benchmarks/libquantum_O3 100 25':
+
+         745132019      branch-instructions                                         
+           1767504      branch-misses             #    0.24% of all branches        
+
+       0.338554945 seconds time elapsed
+
+>>> 2
+
+ Performance counter stats for '/usr/local/benchmarks/libquantum_O3 100 25':
+
+         745131125      branch-instructions                                         
+           1671017      branch-misses             #    0.22% of all branches        
+
+       0.339155300 seconds time elapsed
+
+>>> 3
+
+ Performance counter stats for '/usr/local/benchmarks/libquantum_O3 100 25':
+
+         745130578      branch-instructions                                         
+           1685509      branch-misses             #    0.23% of all branches        
+
+       0.338720682 seconds time elapsed
+
+>>> 4
+
+ Performance counter stats for '/usr/local/benchmarks/libquantum_O3 100 25':
+
+         745133476      branch-instructions                                         
+           1645057      branch-misses             #    0.22% of all branches        
+
+       0.339044367 seconds time elapsed
+
+>>> 5
+
+ Performance counter stats for '/usr/local/benchmarks/libquantum_O3 100 25':
+
+         745134113      branch-instructions                                         
+           1676885      branch-misses             #    0.23% of all branches        
+
+       0.338176739 seconds time elapsed
+
+>>> 6
+
+ Performance counter stats for '/usr/local/benchmarks/libquantum_O3 100 25':
+
+         745128735      branch-instructions                                         
+           1743980      branch-misses             #    0.23% of all branches        
+
+       0.338598731 seconds time elapsed
+
