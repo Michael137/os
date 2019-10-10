@@ -1,0 +1,54 @@
+>>> 1
+
+ Performance counter stats for '/usr/local/benchmarks/dealII_O3 10':
+
+       17287632831      branch-instructions                                         
+         210982939      branch-misses             #    1.22% of all branches        
+
+      17.510995134 seconds time elapsed
+
+>>> 2
+
+ Performance counter stats for '/usr/local/benchmarks/dealII_O3 10':
+
+       17288057750      branch-instructions                                         
+         209763617      branch-misses             #    1.21% of all branches        
+
+      16.106665957 seconds time elapsed
+
+>>> 3
+
+ Performance counter stats for '/usr/local/benchmarks/dealII_O3 10':
+
+       17289324310      branch-instructions                                         
+         210314338      branch-misses             #    1.22% of all branches        
+
+      18.996653940 seconds time elapsed
+
+>>> 4
+
+ Performance counter stats for '/usr/local/benchmarks/dealII_O3 10':
+
+       17288205218      branch-instructions                                         
+         209584778      branch-misses             #    1.21% of all branches        
+
+      16.392466835 seconds time elapsed
+
+>>> 5
+
+ Performance counter stats for '/usr/local/benchmarks/dealII_O3 10':
+
+       17287884665      branch-instructions                                         
+         210402868      branch-misses             #    1.22% of all branches        
+
+      17.035510995 seconds time elapsed
+
+>>> 6
+
+ Performance counter stats for '/usr/local/benchmarks/dealII_O3 10':
+
+       17287585669      branch-instructions                                         
+         210441082      branch-misses             #    1.22% of all branches        
+
+      17.021090012 seconds time elapsed
+
