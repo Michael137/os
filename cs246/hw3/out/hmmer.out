@@ -1,0 +1,24 @@
+
+ Performance counter stats for '/usr/local/benchmarks/hmmer_O3 /usr/local/benchmarks/inputs/nph3.hmm /usr/local/benchmarks/inputs/swiss41':
+
+           3266882      cache-misses              #    0.150 % of all cache refs      (22.22%)
+        2179900225      cache-references                                              (22.23%)
+        5752312588      L1-dcache-load-misses     #    1.59% of all L1-dcache hits    (22.23%)
+      362149453352      L1-dcache-loads                                               (22.23%)
+      136685205778      L1-dcache-stores                                              (22.22%)
+          31989950      L1-icache-load-misses                                         (22.22%)
+            811202      LLC-load-misses           #    4.05% of all LL-cache hits     (22.22%)
+          20025837      LLC-loads                                                     (22.22%)
+             37018      LLC-store-misses                                              (11.11%)
+          28894722      LLC-stores                                                    (11.11%)
+         216931832      branch-load-misses                                            (16.67%)
+       32821793344      branch-loads                                                  (22.22%)
+            320718      dTLB-load-misses          #    0.00% of all dTLB cache hits   (22.22%)
+      362346775456      dTLB-loads                                                    (22.22%)
+           1007563      dTLB-store-misses                                             (22.22%)
+      136750411443      dTLB-stores                                                   (22.22%)
+             29481      iTLB-load-misses          #   66.32% of all iTLB cache hits   (22.22%)
+             44453      iTLB-loads                                                    (22.22%)
+
+      87.915835291 seconds time elapsed
+
