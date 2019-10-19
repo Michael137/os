@@ -1,0 +1,24 @@
+---------------------------------------
+		Simulation Results
+---------------------------------------
+Memory system->
+		Dcache size (bytes)         : 4096
+		Dcache ways                 : 4
+		Dcache block size (bytes)   : 64
+
+		Icache size (bytes)         : 4096
+		Icache ways                 : 1
+		Icache block size (bytes)   : 64
+
+		L2-cache size (bytes)       : 1048576
+		L2-cache ways               : 1
+		L2-cache block size (bytes) : 64
+Simulated events->
+		 I-Cache Miss: 2598 out of 1000000001
+		 D-Cache Miss: 22151507 out of 166420803
+		 L2-Cache Miss: 22148820 out of 44305548
+
+		 Requests resulted in 1166420804 L1 requests, 44305548 L2 requests, 44281256 mem requests 
+
+
+------------------------------------------------

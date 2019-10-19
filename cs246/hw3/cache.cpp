@@ -7,21 +7,22 @@
 
 #include "cache.h"
 
-cache::cache( int blockSize, int totalCacheSize, int associativity, cache* nextLevel, bool writebackDirty) :
+cache::cache( int blockSize, int totalCacheSize, int associativity, cache* nextLevel, bool writebackDirty, std::string type) :
     // Set Cache properties
     blockSz(blockSize),
     totalCacheSz(totalCacheSize),
     assoc(associativity),
     // Calculate Cache bit sizes and masks
-    blockOffsetSize(log2(blockSize)),
-    setSize(log2(totalCacheSize / (blockSize * associativity))),
+    blockOffsetSize(log2(blockSize)), 				// in bits
+    setSize(log2(totalCacheSize / (blockSize * associativity))), // in bits
     tagSize(ADDRESS_SIZE - blockOffsetSize - setSize),
     tagMask( (1 << tagSize) - 1),
     setMask( (1 << setSize) - 1),
     maxSetValue((int) 1 << setSize),
     // Next level properties
     nextLevel(nextLevel),
-    writebackDirty(writebackDirty)
+    writebackDirty(writebackDirty),
+    type(type)
 {
     // Allocate memory for the cache array
     cacheMem = new cacheEntry[totalCacheSize/blockSize];
@@ -236,48 +237,95 @@ int cache::getCacheBlockSize()
 // Doesn't distinguish between reads and writes.
 //
 void cache::addressRequest( unsigned long address ) {
-
+    std::cout << type << std::endl;
     // Compute Set / Tag
     unsigned long tagField = getTag( address );
     unsigned long setField = getSet( address );
 
     // Hit or Miss ?
     int index = isHit( tagField, setField );
+    // std::cout << type << " " << (index != -1) << std::endl;
 
     // Count that access
     addRequest();
 
     // Miss
     if( index == -1 ) {
+    	std::cout << "CACHE MISS" << std::endl;
         // Get the LRU index
         int indexLRU = getLRU( setField );
         if( cacheMem[ indexLRU + setField*assoc].Valid == true ) {
             addEntryRemoved();
         }
 
-        // Count that miss
-        addTotalMiss();
-
         assert(nextLevel != nullptr);
-        // Write the evicted entry to the next level
-        if( writebackDirty &&
-            cacheMem[ indexLRU + setField*assoc].Valid == true) {
-            int tag = cacheMem[indexLRU + setField*assoc].Tag;
-            tag = tag << (getSetSize() + getBlockOffsetSize());
-            int Set = setField;
-            Set = Set << (getBlockOffsetSize());
-            int lru_addr = tag + Set;
-            nextLevel->addressRequest(lru_addr);
-        }
-        // Load the requested address from next level
-        nextLevel->addressRequest(address);
+	if(nextLevel->isVictim()) {
+		int hitIndex = -1;
+		if((hitIndex = nextLevel->isHit(tagField, setField)) != -1) {
+			// TODO: increment hit as well?
+			std::cout << "VICTIM HIT " << hitIndex << std::endl;
+			addHit();
+			struct cacheEntry tmp;
+			tmp.Tag = nextLevel->cacheMem[hitIndex + setField*assoc].Tag;
+			tmp.LRU_status = nextLevel->cacheMem[hitIndex + setField*assoc].LRU_status;
 
-        // Update LRU / Tag / Valid
-        cacheMem[ indexLRU + setField*assoc].Tag = tagField;
-        cacheMem[ indexLRU + setField*assoc].Valid = true;
-        updateLRU( setField, indexLRU );
+			// TODO: what if associativity of victim and L1 is not the same; setField might need to change
+			nextLevel->cacheMem[ hitIndex + setField*assoc].Tag = cacheMem[indexLRU + setField*assoc].Tag; 
+			nextLevel->cacheMem[ hitIndex + setField*assoc].Valid = true;
+			nextLevel->updateLRU( setField, hitIndex );
+
+			cacheMem[ indexLRU + setField*assoc].Tag = tmp.Tag; // TODO: what if associativity of victim and L1 is not the same; setField might need to change
+			cacheMem[ indexLRU + setField*assoc].Valid = true;
+			// cacheMem[ indexLRU + setField*assoc].LRU_status = tmp.LRU_status;
+			updateLRU( setField, indexLRU );
+		} else {
+			std::cout << "VICTIM MISS" << std::endl;
+
+			nextLevel->cacheMem[ indexLRU + setField*assoc].Tag = cacheMem[indexLRU + setField*assoc].Tag; // TODO: what if associativity of victim and L1 is not the same; setField might need to change
+			nextLevel->cacheMem[ indexLRU + setField*assoc].Valid = true;
+			nextLevel->updateLRU( setField, indexLRU );
+
+			nextLevel->nextLevel->addressRequest(address);
+			cacheMem[ indexLRU + setField*assoc].Tag = tagField;
+			cacheMem[ indexLRU + setField*assoc].Valid = true;
+			updateLRU( setField, indexLRU );
+			std::cout << "UPDATED LRU FROM VICTIM CACHE" << std::endl;
+		}
+	} else {
+		std::cout << "NOT VICTIM" << std::endl;
+        	// Count that miss
+        	addTotalMiss();
+
+		// Write the evicted entry to the next level
+		if( writebackDirty &&
+		    cacheMem[ indexLRU + setField*assoc].Valid == true) {
+		    int tag = cacheMem[indexLRU + setField*assoc].Tag;
+		    //std::cout << tag << " " << (getSetSize() + getBlockOffsetSize()) << indexLRU << std::endl;
+		    tag = tag << (getSetSize() + getBlockOffsetSize());
+		    int Set = setField;
+		    Set = Set << (getBlockOffsetSize());
+		    //std::cout << setField << " " << Set << std::endl;
+		    int lru_addr = tag + Set;
+		    //std::cout << "New addr: " << lru_addr << std::endl;
+		    nextLevel->addressRequest(lru_addr);
+		}
+
+		std::cout << "Miss to next level" << std::endl;
+
+		// Load the requested address from next level
+		nextLevel->addressRequest(address);
+
+		std::cout << "Returned from next level" << std::endl;
+
+		// Update LRU / Tag / Valid
+		cacheMem[ indexLRU + setField*assoc].Tag = tagField;
+		cacheMem[ indexLRU + setField*assoc].Valid = true;
+		updateLRU( setField, indexLRU );
+		std::cout << "Updated LRU" << std::endl;
+	}
     }
     else {
+	    std::cout << "CACHE HIT" << std::endl;
         // Count that hit
         addHit();
 

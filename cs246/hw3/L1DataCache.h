@@ -10,8 +10,8 @@
 class l1dcache : public cache {
 public:
     l1dcache( int blockSize, int totalCacheSize, int associativity, cache *nextLevel) :
-        cache( blockSize, totalCacheSize, associativity, nextLevel, true)
-    { }
+        cache( blockSize, totalCacheSize, associativity, nextLevel, true, "L1Cache")
+    {}
 };
 
 #endif

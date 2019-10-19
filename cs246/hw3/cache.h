@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "pin.H"
+#include <string>
 
 using namespace std;
 
@@ -46,9 +47,10 @@ public:
     virtual unsigned int getTagSize() {return tagSize;}
     virtual unsigned int getBlockOffsetSize() {return blockOffsetSize;}
     virtual unsigned int getSetSize() {return setSize;}
+    virtual bool isVictim() {return false;}
 
 protected:
-    cache( int blockSize, int totalCacheSize, int associativity, cache* nextLevel, bool writebackDirty );
+    cache( int blockSize, int totalCacheSize, int associativity, cache* nextLevel, bool writebackDirty, std::string );
 
     //Calculate the Tag and Set of an address based on this cache's properties
     unsigned int getTag( unsigned int address );
@@ -104,6 +106,8 @@ protected:
     cache* const nextLevel;
     // Does this cache write evicted items to the next level (icaches don't need to)
     const bool writebackDirty;
+
+    std::string type;
 };
 
 #endif

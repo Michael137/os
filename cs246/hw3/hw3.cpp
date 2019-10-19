@@ -8,6 +8,7 @@
 #include "L1InstCache.h"
 #include "L1DataCache.h"
 #include "L2Cache.h"
+#include "victim.h"
 
 using namespace std;
 /*
@@ -45,6 +46,7 @@ KNOB<UINT64> KnobInstructionCount(KNOB_MODE_WRITEONCE, "pintool",
 l1icache* icache;
 l1dcache* dcache;
 l2cache* llcache;
+VictimCache* victim;
 memory* mem;
 
 // Keep track if instruction counts so we know when to end simmulation
@@ -100,7 +102,8 @@ void CreateCaches(void)
                 break;
             case 2:
                 parser >> bsize >> comma >> csize >> comma >> assoc >> comma >> vsize;
-                dcache = new l1dcache(bsize, csize, assoc, llcache);
+		victim = new VictimCache(bsize, bsize * vsize, vsize, llcache);
+                dcache = new l1dcache(bsize, csize, assoc, victim);
                 break;
             default:
                 break;
@@ -122,7 +125,9 @@ void CheckInstructionLimits(void)
 /* ===================================================================== */
 void MemoryOp(ADDRINT address)
 {
+    //std::cout << "AR Started" << std::endl;
     dcache->addressRequest( address );
+    //std::cout << "AR Finished" << std::endl;
 }
 
 /* ===================================================================== */
@@ -138,6 +143,8 @@ void AllInstructions(ADDRINT ins_ptr)
 void PrintResults(void)
 {
     ofstream out(KnobOutputFile.Value().c_str());
+
+    //std::cout << "FINISHED PIN" << std::endl;
 
     out.setf(ios::fixed, ios::floatfield);
     out.precision(2);
@@ -191,6 +198,7 @@ void Instruction(INS ins, VOID *v)
     INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR) AllInstructions,
             IARG_INST_PTR, IARG_END);
 
+    //std::cout << "PIN CHECK 1" << std::endl;
     // Reads go to dcache
     if (INS_IsMemoryRead(ins)) {
         INS_InsertPredicatedCall(
@@ -200,6 +208,7 @@ void Instruction(INS ins, VOID *v)
 
     }
 
+    //std::cout << "PIN CHECK 2" << std::endl;
     // Writes go to dcache
     // XXX: note this is not an else branch. It's pretty typical for an x86
     // instruction to be both a read and a write.
@@ -209,6 +218,7 @@ void Instruction(INS ins, VOID *v)
                 IARG_MEMORYWRITE_EA,
                 IARG_END);
     }
+    // std::cout << "PIN DONE" << std::endl;
 }
 
 /* ===================================================================== */
