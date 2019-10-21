@@ -10,7 +10,6 @@
 class VictimCache : public cache {
 
 public:
-	// Fully set-associative => associativity == number of cache lines
 	VictimCache( int blockSize, int totalCacheSize, int associativity, cache *nextLevel) :
 		cache( blockSize, totalCacheSize, associativity, nextLevel, true)
 	{}

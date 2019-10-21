@@ -6,7 +6,6 @@
 #include <cmath>
 
 #include "cache.h"
-
 cache::cache( int blockSize, int totalCacheSize, int associativity, cache* nextLevel, bool writebackDirty) :
     // Set Cache properties
     blockSz(blockSize),
@@ -253,28 +252,41 @@ void cache::addressRequest( unsigned long address ) {
             addEntryRemoved();
         }
 
-        assert(nextLevel != nullptr);
+    assert(nextLevel != nullptr);
 	if(nextLevel->isVictim()) {
+	   // Check if victim cache (VC) contains address using
+	   // the set and tag calculated according to the
+	   // VC level
 	   unsigned long vTagField = nextLevel->getTag(address);
 	   unsigned long vSetField = nextLevel->getSet(address);
 	   int vHitIndex = nextLevel->isHit(vTagField, vSetField);
 	   int vAssoc = nextLevel->assoc;
 
 	   if(vHitIndex != -1) {
+	   	   // VC hit counts as a cache hit for L1
+	   	   // and not as a miss
 			addHit();
+
+			// Evict LRU from L1 and swap it with the correct VC
+			// entry (which is the tagField)
 			if(cacheMem[indexLRU + setField*assoc].Valid == true) {
+				// Get address of LRU in L1
 				int lruTag = cacheMem[indexLRU + setField*assoc].Tag;
 				lruTag = lruTag << (getSetSize() + getBlockOffsetSize());
 				int lruSet = setField;
 				lruSet = lruSet << (getBlockOffsetSize());
 				unsigned long vlru_addr = lruTag + lruSet;
+
+				// Recalculate tag from the LRU address
 				unsigned long vLruTag = nextLevel->getTag(vlru_addr);
 
+				// Place the LRU into VC at the place where we previously hit
 				nextLevel->cacheMem[vHitIndex + vSetField*vAssoc].Tag = vLruTag;
 				nextLevel->cacheMem[vHitIndex + vSetField*vAssoc].Valid = true;
 				nextLevel->updateLRU( vSetField, vHitIndex );
 			}
 
+			// Place the correct cache line into L1
 			cacheMem[ indexLRU + setField*assoc].Tag = tagField;
 			cacheMem[ indexLRU + setField*assoc].Valid = true;
 			updateLRU( setField, indexLRU );
@@ -285,6 +297,10 @@ void cache::addressRequest( unsigned long address ) {
 	}
 	else
 	   addTotalMiss();
+
+	// On a miss in the victim cache add evict the LRU from
+	// L1 to the victim cache and fetch the actual address
+	// into L1
 
 	// Write the evicted entry to the next level
 	if( writebackDirty &&

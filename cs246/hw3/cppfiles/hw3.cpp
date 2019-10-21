@@ -45,7 +45,7 @@ KNOB<int> KnobWithVictim(KNOB_MODE_WRITEONCE, "pintool",
         "victim","1", "Run with or without victim cache");
 
 KNOB<int> KnobVerbose(KNOB_MODE_WRITEONCE, "pintool",
-        "verbose","0", "Print cache information in results or not");
+        "verbose","1", "Print cache information in results or not");
 
 // Globals for the various caches
 /* ===================================================================== */
@@ -109,6 +109,9 @@ void CreateCaches(void)
             case 2:
                 parser >> bsize >> comma >> csize >> comma >> assoc >> comma >> vsize;
 		if(KnobWithVictim.Value() != 0) {
+			// Fully set-associative:
+			// associativity is the number of cache lines/entries
+			// i.e., vsize for the victim cache
 			victim = new VictimCache(bsize, bsize * vsize, vsize, llcache);
 			dcache = new l1dcache(bsize, csize, assoc, victim);
 		} else {
