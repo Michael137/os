@@ -1,93 +1,27 @@
-000 (3792.000.000) 10/17 18:07:51 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=26561_3719_4>
+000 (5396.000.000) 10/21 01:33:34 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=868_f44b_4>
 ...
-001 (3792.000.000) 10/17 18:07:58 Job executing on host: <172.31.20.29:9618?addrs=172.31.20.29-9618&noUDP&sock=5746_db46_3>
+001 (5396.000.000) 10/21 01:33:34 Job executing on host: <172.31.20.29:9618?addrs=172.31.20.29-9618&noUDP&sock=828_8481_3>
 ...
-006 (3792.000.000) 10/17 18:07:58 Image size of job updated: 1
-	0  -  MemoryUsage of job (MB)
-	0  -  ResidentSetSize of job (KB)
+006 (5396.000.000) 10/21 01:33:43 Image size of job updated: 10660
+	11  -  MemoryUsage of job (MB)
+	10660  -  ResidentSetSize of job (KB)
 ...
-007 (3792.000.000) 10/17 18:07:58 Shadow exception!
-	Error from slot1_2@cs246-muscle.seas.harvard.edu: STARTER at 172.31.20.29 failed to send file(s) to <172.31.60.18:9618>: error reading from /var/lib/condor/execute/dir_9685/out: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <172.31.20.29:36949>
-	51  -  Run Bytes Sent By Job
-	2449772  -  Run Bytes Received By Job
+006 (5396.000.000) 10/21 01:34:19 Image size of job updated: 360880
+	11  -  MemoryUsage of job (MB)
+	10660  -  ResidentSetSize of job (KB)
 ...
-012 (3792.000.000) 10/17 18:07:58 Job was held.
-	Error from slot1_2@cs246-muscle.seas.harvard.edu: STARTER at 172.31.20.29 failed to send file(s) to <172.31.60.18:9618>: error reading from /var/lib/condor/execute/dir_9685/out: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <172.31.20.29:36949>
-	Code 13 Subcode 2
-...
-000 (3796.000.000) 10/17 18:08:52 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=26561_3719_4>
-...
-001 (3796.000.000) 10/17 18:08:52 Job executing on host: <172.31.20.29:9618?addrs=172.31.20.29-9618&noUDP&sock=5746_db46_3>
-...
-006 (3796.000.000) 10/17 18:08:52 Image size of job updated: 123864
-	0  -  MemoryUsage of job (MB)
-	0  -  ResidentSetSize of job (KB)
-...
-005 (3796.000.000) 10/17 18:08:52 Job terminated.
-	(1) Normal termination (return value 1)
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	2190  -  Run Bytes Sent By Job
-	2449776  -  Run Bytes Received By Job
-	2190  -  Total Bytes Sent By Job
-	2449776  -  Total Bytes Received By Job
-	Partitionable Resources :    Usage  Request Allocated 
-	   Cpus                 :                 1         1 
-	   Disk (KB)            :     2404     2500      7501 
-	   Memory (MB)          :        0        1       128 
-...
-000 (3801.000.000) 10/17 18:09:55 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=26561_3719_4>
-...
-001 (3801.000.000) 10/17 18:09:55 Job executing on host: <172.31.20.29:9618?addrs=172.31.20.29-9618&noUDP&sock=5746_db46_3>
-...
-006 (3801.000.000) 10/17 18:09:55 Image size of job updated: 108624
-	0  -  MemoryUsage of job (MB)
-	0  -  ResidentSetSize of job (KB)
-...
-005 (3801.000.000) 10/17 18:09:55 Job terminated.
-	(1) Normal termination (return value 1)
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
-		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	2190  -  Run Bytes Sent By Job
-	2449755  -  Run Bytes Received By Job
-	2190  -  Total Bytes Sent By Job
-	2449755  -  Total Bytes Received By Job
-	Partitionable Resources :    Usage  Request Allocated 
-	   Cpus                 :                 1         1 
-	   Disk (KB)            :     2404     2500      7501 
-	   Memory (MB)          :        0        1       128 
-...
-000 (3807.000.000) 10/17 18:12:06 Job submitted from host: <172.31.60.18:9618?addrs=172.31.60.18-9618&noUDP&sock=26561_3719_4>
-...
-009 (3792.000.000) 10/17 18:12:30 Job was aborted by the user.
-	via condor_rm (by user mbuch)
-...
-001 (3807.000.000) 10/17 18:12:35 Job executing on host: <172.31.20.29:9618?addrs=172.31.20.29-9618&noUDP&sock=5746_db46_3>
-...
-006 (3807.000.000) 10/17 18:12:43 Image size of job updated: 12724
-	13  -  MemoryUsage of job (MB)
-	12724  -  ResidentSetSize of job (KB)
-...
-006 (3807.000.000) 10/17 18:12:59 Image size of job updated: 12788
-	13  -  MemoryUsage of job (MB)
-	12724  -  ResidentSetSize of job (KB)
-...
-005 (3807.000.000) 10/17 18:12:59 Job terminated.
+005 (5396.000.000) 10/21 01:34:19 Job terminated.
 	(1) Normal termination (return value 0)
-		Usr 0 00:00:24, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:44, Sys 0 00:00:00  -  Run Remote Usage
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
-		Usr 0 00:00:24, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:44, Sys 0 00:00:00  -  Total Remote Usage
 		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
-	1496  -  Run Bytes Sent By Job
-	2450531  -  Run Bytes Received By Job
-	1496  -  Total Bytes Sent By Job
-	2450531  -  Total Bytes Received By Job
+	197  -  Run Bytes Sent By Job
+	2455876  -  Run Bytes Received By Job
+	197  -  Total Bytes Sent By Job
+	2455876  -  Total Bytes Received By Job
 	Partitionable Resources :    Usage  Request Allocated 
-	   Cpus                 :     0.45        1         1 
-	   Disk (KB)            :  2409        2500      7501 
-	   Memory (MB)          :    13           1       128 
+	   Cpus                 :     1.00        1         1 
+	   Disk (KB)            :  2414        2500      7508 
+	   Memory (MB)          :    11           1       128 
 ...
