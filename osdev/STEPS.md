@@ -89,7 +89,7 @@ grub-mkrescue -o occamos.iso isodir
 * xorriso complaints when running grub2-mkcfg
   * Simply get latest xorriso using package manager (likely it is not even installed on the system yet, contrary to what the warning implies)
   * On FreeBSD grub-mkrescue is part of the unmaintained/deprecated [sysutils/grub2](https://www.freshports.org/sysutils/grub2) package
-    * Unfortunately the port currently only builds using at most gcc-7
+    * Unfortunately the port currently [only builds using at most gcc-7](https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=232961)
     * Install it using [lang/gcc7](https://www.freshports.org/lang/gcc7) like so (make sure you install all the dependencies; missing dependencies should be indicated in make errors):
       1. cd /usr/ports/sysutils/grub2
       2. sudo make DISABLE_VULNERABILITIES=yes CC=`which gcc7`
