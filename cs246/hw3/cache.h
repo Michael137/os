@@ -48,11 +48,9 @@ public:
     virtual unsigned int getBlockOffsetSize() {return blockOffsetSize;}
     virtual unsigned int getSetSize() {return setSize;}
     virtual bool isVictim() {return false;}
-    virtual std::string getType() {return type;}
-    virtual void setLowerLevel(cache* const ll) {lower = ll;}
 
 protected:
-    cache( int blockSize, int totalCacheSize, int associativity, cache* nextLevel, bool writebackDirty, std::string, cache* );
+    cache( int blockSize, int totalCacheSize, int associativity, cache* nextLevel, bool writebackDirty);
 
     //Calculate the Tag and Set of an address based on this cache's properties
     unsigned int getTag( unsigned int address );
@@ -108,9 +106,6 @@ protected:
     cache* const nextLevel;
     // Does this cache write evicted items to the next level (icaches don't need to)
     const bool writebackDirty;
-
-    std::string type;
-    cache* lower;
 };
 
 #endif

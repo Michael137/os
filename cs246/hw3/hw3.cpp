@@ -100,20 +100,19 @@ void CreateCaches(void)
         switch(i){
             case 0:
                 parser >> bsize >> comma >> csize >> comma >> assoc;
-                llcache = new l2cache(bsize, csize, assoc, mem,victim);
+                llcache = new l2cache(bsize, csize, assoc, mem);
                 break;
             case 1:
                 parser >> bsize >> comma >> csize >> comma >> assoc;
-                icache = new l1icache(bsize, csize, assoc, llcache,nullptr);
+                icache = new l1icache(bsize, csize, assoc, llcache);
                 break;
             case 2:
                 parser >> bsize >> comma >> csize >> comma >> assoc >> comma >> vsize;
 		if(KnobWithVictim.Value() != 0) {
-			victim = new VictimCache(bsize, bsize * vsize, vsize, llcache, dcache);
-			dcache = new l1dcache(bsize, csize, assoc, victim,nullptr);
-			victim->setLowerLevel(dcache);
+			victim = new VictimCache(bsize, bsize * vsize, vsize, llcache);
+			dcache = new l1dcache(bsize, csize, assoc, victim);
 		} else {
-			dcache = new l1dcache(bsize, csize, assoc, llcache, nullptr);
+			dcache = new l1dcache(bsize, csize, assoc, llcache);
 		}
                 break;
             default:
@@ -136,9 +135,7 @@ void CheckInstructionLimits(void)
 /* ===================================================================== */
 void MemoryOp(ADDRINT address)
 {
-    //std::cout << "AR Started" << std::endl;
     dcache->addressRequest( address );
-    //std::cout << "AR Finished" << std::endl;
 }
 
 /* ===================================================================== */
@@ -154,8 +151,6 @@ void AllInstructions(ADDRINT ins_ptr)
 void PrintResults(void)
 {
     ofstream out(KnobOutputFile.Value().c_str());
-
-    //std::cout << "FINISHED PIN" << std::endl;
 
     out.setf(ios::fixed, ios::floatfield);
     out.precision(2);
@@ -211,9 +206,11 @@ void PrintResults(void)
     } else {
             out.precision(6);
 	    if(KnobWithVictim.Value()) {
-		    out << victim->getCacheAssoc() << "," << dcache->getTotalMiss() << "," << dcache->getRequest() << "," << static_cast<float>(dcache->getTotalMiss())/static_cast<float>(dcache->getRequest()) << endl;
+		    out << victim->getCacheAssoc() << "," << dcache->getTotalMiss() << "," << dcache->getRequest()
+		    	<< "," << static_cast<float>(dcache->getTotalMiss())/static_cast<float>(dcache->getRequest()) << endl;
 	    } else {
-		    out << dcache->getCacheAssoc() << "," << dcache->getTotalMiss() << "," << dcache->getRequest() << "," << static_cast<float>(dcache->getTotalMiss())/static_cast<float>(dcache->getRequest()) << endl;
+		    out << dcache->getCacheAssoc() << "," << dcache->getTotalMiss() << "," << dcache->getRequest()
+		    	<< "," << static_cast<float>(dcache->getTotalMiss())/static_cast<float>(dcache->getRequest()) << endl;
 	    }
     }
 }
@@ -226,7 +223,6 @@ void Instruction(INS ins, VOID *v)
     INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR) AllInstructions,
             IARG_INST_PTR, IARG_END);
 
-    //std::cout << "PIN CHECK 1" << std::endl;
     // Reads go to dcache
     if (INS_IsMemoryRead(ins)) {
         INS_InsertPredicatedCall(
@@ -236,7 +232,6 @@ void Instruction(INS ins, VOID *v)
 
     }
 
-    //std::cout << "PIN CHECK 2" << std::endl;
     // Writes go to dcache
     // XXX: note this is not an else branch. It's pretty typical for an x86
     // instruction to be both a read and a write.
@@ -246,7 +241,6 @@ void Instruction(INS ins, VOID *v)
                 IARG_MEMORYWRITE_EA,
                 IARG_END);
     }
-    // std::cout << "PIN DONE" << std::endl;
 }
 
 /* ===================================================================== */

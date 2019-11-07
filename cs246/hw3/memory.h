@@ -13,13 +13,12 @@
 class memory : public cache {
 
 public:
-    memory(cache* lower) :
-        cache(1, 1, 1, nullptr, false, "main memory",lower)
+    memory() :
+        cache(1, 1, 1, nullptr, false)
     { }
 
     void addressRequest( unsigned long address ) {
         (void) address;
-	// std::cout << "MEM" << std::endl;
         addRequest();
     }
 };

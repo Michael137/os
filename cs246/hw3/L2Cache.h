@@ -10,8 +10,8 @@
 
 class l2cache : public cache {
 public:
-    l2cache(int blockSize, int totalCacheSize, int associativity, cache *nextLevel, cache* lowerLevel) :
-        cache( blockSize, totalCacheSize, associativity, nextLevel, true, "L2Cache", lowerLevel)
+    l2cache(int blockSize, int totalCacheSize, int associativity, cache* nextLevel) :
+        cache( blockSize, totalCacheSize, associativity, nextLevel, true)
     { }
 };
 

@@ -258,7 +258,6 @@ void cache::addressRequest( unsigned long address ) {
 
         assert(nextLevel != nullptr);
 	if(nextLevel->isVictim()) {
-	   // std::cout << "L1 MISS " << address << std::endl;
 	   unsigned long vTagField = nextLevel->getTag(address);
 	   unsigned long vSetField = nextLevel->getSet(address);
 	   int vHitIndex = nextLevel->isHit(vTagField, vSetField);
@@ -266,14 +265,13 @@ void cache::addressRequest( unsigned long address ) {
 
 	   if(vHitIndex != -1) {
 			addHit();
-			// struct cacheEntry vHitEntry = nextLevel->cacheMem[vHitIndex + vSetField*vAssoc];
 			struct cacheEntry LRUEntry = cacheMem[indexLRU + setField*assoc];
 
 			nextLevel->cacheMem[vHitIndex + vSetField*vAssoc].Tag = LRUEntry.Tag;
 			nextLevel->cacheMem[vHitIndex + vSetField*vAssoc].Valid = true;
 			nextLevel->updateLRU( vSetField, vHitIndex );
 
-			cacheMem[ indexLRU + setField*assoc].Tag = tagField; //vHitEntry.Tag;
+			cacheMem[ indexLRU + setField*assoc].Tag = tagField;
 			cacheMem[ indexLRU + setField*assoc].Valid = true;
 			updateLRU( setField, indexLRU );
 			return;
@@ -291,8 +289,6 @@ void cache::addressRequest( unsigned long address ) {
 	    int Set = setField;
 	    Set = Set << (getBlockOffsetSize());
 	    unsigned long lru_addr = tag + Set;
-//	    if(nextLevel->isVictim())
-//	    	std::cout << "EVICTING TO VICTIM: " << lru_addr << std::endl;
 	    nextLevel->addressRequest(lru_addr);
 	}
 
@@ -304,10 +300,6 @@ void cache::addressRequest( unsigned long address ) {
 	cacheMem[ indexLRU + setField*assoc].Valid = true;
 	updateLRU( setField, indexLRU ); // make LRU the MRU
     } else {
-	if(isVictim())
-	{
-//		std::cout << "VICTIM HIT (" << address << ") FROM: " << lower->getType() << std::endl;
-	}
         // Count that hit
         addHit();
 
