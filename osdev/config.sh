@@ -2,12 +2,12 @@ SYSTEM_HEADER_PROJECTS="libc kernel"
 PROJECTS="libc kernel"
 
 export OS_NAME=occamos
-export MAKE=gmake
+export MAKE=make
 export HOST=i686-elf
 
-export AR=$HOME/opt/cross/bin/${HOST}-ar
-export AS=$HOME/opt/cross/bin/${HOST}-as
-export CC=$HOME/opt/cross/bin/${HOST}-gcc
+export AR=$HOME/opt/cross-compiler/bin/${HOST}-ar
+export AS=$HOME/opt/cross-compiler/bin/${HOST}-as
+export CC=$HOME/opt/cross-compiler/bin/${HOST}-gcc
 
 export PREFIX=/usr
 export EXEC_PREFIX=$PREFIX

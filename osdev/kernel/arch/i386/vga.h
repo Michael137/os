@@ -34,6 +34,6 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
 }
 
 // Phyiscal location of buffer in VGA mode 3
-static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
+static uint16_t* const VGA_MEMORY = (uint16_t*) 0xC03FF000;
 
 #endif // ARCH_I386_VGA_H_IN

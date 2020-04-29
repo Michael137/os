@@ -8,3 +8,6 @@ isodir/
 *.d
 sysroot/
 *.iso
+clean
+*.kernel
+objconv/
