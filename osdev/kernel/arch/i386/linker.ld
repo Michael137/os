@@ -10,7 +10,9 @@ SECTIONS
  	 * 1 MB in the PAS. */
 	. = 0xC0100000;
 
-	_kernel_start = .;
+	/* These labels can be used in code files */
+	kernel_virtual_start = .;
+	kernel_physical_start = . - 0xC0000000;
 
 	/* NOTE: we page-align the sections */
 	.text ALIGN(4K) : AT (ADDR (.text) - 0xC0000000)
@@ -36,7 +38,8 @@ SECTIONS
 		*(.bootstrap_stack)
 	}
 
-	_kernel_end = .;
+	kernel_virtual_end = .;
+	kernel_physical_end = . - 0xC0000000;
  
 	/* The compiler may produce other sections, by default it will put them in
 	   a segment with the same name. Simply add stuff here as needed. */
