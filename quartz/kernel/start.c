@@ -27,7 +27,7 @@ start()
 	w_mideleg(0xffff);
 	w_sie(r_sie() | SIE_SEIE | SIE_STIE | SIE_SSIE);
 
-	timerinit();
+	//timerinit();
 
 	int id = r_mhartid();
 	w_tp(id);
@@ -35,6 +35,7 @@ start()
 	asm volatile("mret");
 }
 
+/*
 void timerinit()
 {
 	int id = r_mhartid();
@@ -45,7 +46,7 @@ void timerinit()
 	uint64* scratch = &mscratch0[32 * id];
 	scratch[4] = CLINT_MTIMECMP(id);
 	scratch[5] = interval;
-	w_mscartch((uint64) scratch);
+	w_mscratch((uint64) scratch);
 
 	w_mtvec((uint64) timervec);
 
@@ -53,3 +54,4 @@ void timerinit()
 
 	w_mie(r_mie() | MIE_MTIE);
 }
+*/

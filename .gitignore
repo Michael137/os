@@ -4,3 +4,6 @@ iofile
 
 ipc/ipc-dynamic
 ipc/ipc-static
+
+*.swp
+*.o

@@ -1,11 +1,9 @@
 K=kernel
 U=user
 
-OBJS = \
-  $K/entry.o
-  $K/start.o
+OBJS = $K/entry.o $K/start.o $K/main.o
 
-TOOLPREFIX=riscv64-unknown-
+TOOLPREFIX=riscv64-unknown-elf-
 QEMU=qemu-system-riscv64
 
 CC=$(TOOLPREFIX)gcc
@@ -34,9 +32,13 @@ clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg */*.o */*.d */*.asm */*.sym
 	rm -f $K/kernel
 
+ifndef CPUS
+  CPUS := 3
+endif
+
 QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 128M -smp $(CPUS) -nographic
-QEMUOPTS += -drive if=none,format=raw,id=x0
-QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+#QEMUOPTS += -drive if=none,format=raw,id=x0
+#QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
 
 qemu: $K/kernel
 	$(QEMU) $(QEMUOPTS)
