@@ -1,7 +1,7 @@
 # Connect serial cable
-Pin 2: white
-Pin 3: pink
-Pin 5: black
+* Pin 2: white
+* Pin 3: pink
+* Pin 5: black
 
 # Connect over serial
 1. `sudo cu -s 115200 -l /dev/ttyU0`
